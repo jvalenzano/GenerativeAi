@@ -1,0 +1,136 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <link href="/static/style.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <img src="/static/chatbot-ui-images/grey-content-top.png" alt="grey content top">
+
+        <br>
+        <br>
+        <div class="Full-Chat-Wdiget">
+            <div class="rectangle-1">
+                <div class="rectangle-2"></div>
+                <form id="chat-form" style="display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                padding: 0px;
+                position: absolute;
+                width: 525px;
+                height: 52px;
+                left: 461px;
+                top: 32px;">
+                
+
+                    <input type="text" id="user-input" name="user-input" class="frame-3">
+                    <label for="user-input" class="ask-text" style="left:1%;position: absolute;top: 29.41%;">Ask me anything...</label>
+                    
+                    
+                    <input type="submit" value="Ask!"class="asks" style="background-color: #184C23; color: white; padding: 5px 10px; border: none; cursor: pointer; font: size 18px;">
+                    
+                
+                </form>
+                
+            </div>
+        </div>
+        <div class="popup" id="popup" style="display: none;">
+            <form id="continue-form">
+                <div class="rectangle-3">
+                    <div class="content-container" id="response-box"></div>
+                    <form id="chat-popup" style="display: flex;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    padding: 0px;
+                    position: absolute;
+                    width: 525px;
+                    height: 52px;
+                    left: 461px;
+                    top: 32px;">
+                        <input type="text" id="user-input-popup" name="user-input-popup" class="frame-3">
+                        <input type="submit" value="Ask!" class="asks" style="background-color: #184C23; color: white; padding: 5px 10px; border: none; cursor: pointer; font: size 18px; display: inline;">
+                    </form>
+                </div>
+            </form>
+            <button onclick="hidePopup()" style="position: absolute; top: 10px; right: 10px;">
+                <img src="/static/chatbot-ui-images/icon-close.svg" alt="Exit">
+            </button>
+        </div>
+        <script>
+            $("#chat-form").submit(function(event) {
+                event.preventDefault();
+                var userInput = $("#user-input").val();
+                $.ajax({
+                    url: '/api/chat',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        "model":"gpt-35-turbo",
+                        "messages":[
+                            {
+                                "role":"user",
+                                "content": userInput
+                            }
+                        ]
+                    }),
+                    success: function(data) {
+                        var formattedData = JSON.stringify(data).replace(/\\n/g, '<br>');
+                        $("#response-box").html(formattedData);
+                        $("#popup").show();
+                    },
+                    error: function(error) {
+                        $("#response-box").text("Error: " + error);
+                        $("#popup").show();
+                    }
+                });
+            });
+
+            $("#continue-form").submit(function(event) {
+                event.preventDefault();
+                var userInput = $("#user-input-popup").val();
+                $.ajax({
+                    url: '/api/chat',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        "model":"gpt-35-turbo",
+                        "messages":[
+                            {
+                                "role":"user",
+                                "content": userInput
+                            }
+                        ]
+                    }),
+                    success: function(data) {
+                        var formattedData = JSON.stringify(data).replace(/\\n/g, '<br>');
+                        $("#response-box").html(formattedData);
+                        $("#user-input-popup").val(''); // Clear input field
+                        $("#user-input-popup").focus(); // Set focus back to input field
+                    },
+                    error: function(error) {
+                        $("#response-box").text("Error: " + error);
+                    }
+                });
+            });
+        </script>
+         <script>
+            document.getElementById('user-input').addEventListener('input', function() {
+                if (this.value !== '') {
+                    document.querySelector('.ask-text').style.display = 'none';
+                } else {
+                    document.querySelector('.ask-text').style.display = 'block';
+                }
+            });
+        </script>
+        <script>
+            function hidePopup() {
+                $("#popup").hide();
+            }
+        </script>
+        </body>
+        </html>
+        <img src="/static/chatbot-ui-images/grey-content-bottom.png" alt="grey content bottom">
+   
+</body>
+</html>
