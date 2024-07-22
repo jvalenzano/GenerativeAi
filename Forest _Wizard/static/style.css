@@ -1,3 +1,80 @@
+/* Larry Additions for Context Toggle */
+#iframe-chat {
+    width:926px;
+    height:660px;
+    position:absolute;
+    left:20px;
+    top:20px;
+    display:none;
+    border: 1px solid #ccc;
+}
+
+.chat-context-buttons {
+    position:absolute;
+    left:20px;
+    top:700px;
+    display: flex;
+    align-items: center;
+}
+.context-title{
+    font-size: 15px;
+    margin-right: 14px;
+    color: #999;
+}
+
+.chat-context-button {
+    background-color: #FFFFFF;
+    border: 1px solid orange;
+    display: inline-block;
+    font-size: 16px;
+
+    padding:4px;
+    padding-left: 6px;
+    padding-right: 12px;
+
+    transition: .2s all;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: -1px;
+}
+
+.chat-context-button:hover {
+    background-color: #f1f1f1;
+    color: #184d23;
+}
+
+.chat-context-buttons .chat-context-button:nth-child(2) {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.chat-context-buttons .chat-context-button:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.chat-context-button.selected, .chat-context-button.selected:hover {
+    background-color: #FFF3DD;
+    box-shadow: inset 4px 4px 10px #ffd587;
+    color: #184d23;
+}
+
+.toggle-chat-context:hover {
+    background-color: #FFD996;
+}
+
+.content-container {
+    border: 1px solid #ccc;
+}
+
+
+
+
+
+
+
 /* Full Chat Widget */
 .Full-Chat-Wdiget{
 position: relative;
