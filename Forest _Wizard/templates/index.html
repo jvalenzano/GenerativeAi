@@ -18,6 +18,7 @@
                 <div class="chat-context-buttons"style ="top:470px;">
                     <div class="context-title">Chat Context:</div>
                     <div class="chat-context-button is-general selected"><img src="/static/chatbot-ui-images/specialty-icons/chaticon-generic.svg" style="width:40px;height:40px;" />General</div>
+                    <div class="chat-context-button is-pipeline"><img src="/static/chatbot-ui-images/specialty-icons/chaticon-pipeline.svg" style="width:40px;height:40px;" />API Pipeline</div>
                     <div class="chat-context-button is-fs"><img src="/static/chatbot-ui-images/specialty-icons/chaticon-fs.svg" style="width:40px;height:40px;" />Forest Service</div>
                 </div>
                 <div class="rectangle-2"></div>
@@ -118,17 +119,27 @@
 
             var $iframe = $('#iframe-chat');
             var $fsButton = $('.chat-context-button.is-fs');
+            var $pipelineButton = $('.chat-context-button.is-pipeline');
             var $generalButton = $('.chat-context-button.is-general');
 
             $fsButton.click(function(){ 
                 $iframe.show();
                 $fsButton.addClass('selected');
+                $pipelineButton.removeClass('selected');
                 $generalButton.removeClass('selected');
             });
             $generalButton.click(function(){ 
                 $iframe.hide();
                 $fsButton.removeClass('selected');
+                $pipelineButton.removeClass('selected');
                 $generalButton.addClass('selected');
+            });
+            $pipelineButton.click(function(){ 
+                $iframe.hide();
+                /* ADD PIPELINE LOGIC HERE */
+                $fsButton.removeClass('selected');
+                $pipelineButton.addClass('selected');
+                $generalButton.removeClass('selected');
             });
         </script>
     <img src="/static/chatbot-ui-images/grey-content-bottom.png" alt="grey content bottom" style="position: relative; top: 400px;">
