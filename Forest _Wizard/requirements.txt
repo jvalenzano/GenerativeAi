@@ -38,8 +38,7 @@ pure-eval==0.2.2
 Pygments==2.18.0
 pyparsing==2.4.7
 pytest==8.1.1
-python-dateutil==2.9.0.post0
-pywin32==306
+python-dateutil==2.9.0.post0 
 pyzmq==26.0.3
 requests==2.24.0
 six==1.16.0
