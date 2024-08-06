@@ -4,7 +4,7 @@ import json
 import os
 
 app = Flask(__name__)
-api_key = 'e3632968ed2e48f5b1cac0b036b9affe'
+api_key = os.getenv('OPENAI_API_KEY')
 Ocp_Apim_Subscription_Key = '5bbf6c102d86484c818aba9d18588962'
 
 #####################################
