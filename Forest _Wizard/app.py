@@ -5,6 +5,8 @@ import os
 
 app = Flask(__name__)
 api_key = os.getenv('OPENAI_API_KEY')
+
+
 Ocp_Apim_Subscription_Key = '5bbf6c102d86484c818aba9d18588962'
 
 #####################################
@@ -25,7 +27,7 @@ def make_post_request_pipeline(json_body):
         dict: The response JSON if the request is successful, otherwise an error dictionary with the error message and response text.
     """
     
-   
+    
     headers = {'Ocp-Apim-Subscription-Key': Ocp_Apim_Subscription_Key, 'Content-Type': 'application/json'}
     api_url = 'https://apim-com-nonprd-poc.azure-api.net/ai-pipeline/onepromt/v1/BASE2-gpt-35-turbo?api-version=2024-02-15-preview'
 
@@ -34,7 +36,7 @@ def make_post_request_pipeline(json_body):
         if response.status_code == 200:
             return response.json()
         else:
-            return {"error": "Request failed with status code: " + str(response.status_code), "response": response.text}
+            return response.json()
     except Exception as e:
         return {"error": "An error occurred: " + str(e)}
 
@@ -56,7 +58,7 @@ def make_post_request_openai(json_body):
     Returns:
         dict: The response JSON if the request is successful, otherwise an error dictionary with the error message and response text.
     """
-    
+   
     headers = {'Content-Type': 'application/json'}
     api_url = 'https://oai-nonprd-openai-poc-01.openai.azure.com/openai/deployments/BASE2-gpt-35-turbo/chat/completions?api-version=2024-02-15-preview&api-key='+api_key
  
@@ -65,7 +67,7 @@ def make_post_request_openai(json_body):
         if response.status_code == 200:
             return response.json()
         else:
-            return {"error": "Request failed with status code: " + str(response.status_code), "response": response.text}
+            return response.json()
     except Exception as e:
         return {"error": "An error occurred: " + str(e)}
 #landing page
@@ -81,10 +83,17 @@ def chat_pipeline():
 
     #call helperfunction to make api call
     response = make_post_request_pipeline(json_body)
+    
 
-    #return response, just the content 
-    content = response['choices'][0]['message']['content']
-    return jsonify(content)
+     
+    if 'choices' in response:
+        #return response, just the content
+        content = response['choices'][0]['message']['content']
+        return jsonify(content)
+    else:
+         #if error return the whole response
+
+        return jsonify(response)
 
 
 @app.route('/openai/direct/chat', methods=['POST', 'GET'])
@@ -94,9 +103,13 @@ def chat_openai():
     #call helperfunction to make api call
     response = make_post_request_openai(json_body)
 
-    #return response, just the content 
-    content = response['choices'][0]['message']['content']
-    return jsonify(content)
+    if 'choices' in response:
+        #return response, just the content
+        content = response['choices'][0]['message']['content']
+        return jsonify(content)
+    else:
+        #if error return the whole response
+        return jsonify(response)
 
 
 if __name__ == '__main__':
