@@ -1,5 +1,5 @@
 FROM python:3.9.1-alpine
-WORKDIR /Forest_Wizard
+WORKDIR /app
 COPY . .
 RUN pip install --upgrade pip
 COPY ./Forest_Wizard/requirements.txt .
