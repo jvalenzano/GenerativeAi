@@ -1,0 +1,159 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <link href="/static/style.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <img src="/static/chatbot-ui-images/grey-content-top.png" alt="grey content top">
+
+        <br>
+        <br>
+        <div class="Full-Chat-Wdiget">
+            <div class="rectangle-1">
+                <div class="rectangle-2"></div>
+                <form id="chat-form" style="display: flex;
+                flex-direction: row;
+                align-items: flex-start;
+                padding: 0px;
+                position: absolute;
+                width: 525px;
+                height: 52px;
+                left: 461px;
+                top: 32px;">
+                
+
+                    <input type="text" id="user-input" name="user-input" class="frame-3">
+                    <label for="user-input" class="ask-text" style="left:1%;position: absolute;top: 29.41%;">Ask me anything...</label>
+                    
+                    
+                    <input type="submit" value="Ask!"class="asks" style="background-color: #184C23; color: white; padding: 5px 10px; border: none; cursor: pointer; font: size 18px;">
+                    
+                
+                </form>
+                
+            </div>
+        </div>
+        <div class="popup" id="popup" style="display: none;">
+            <div id="iframe-chat">
+                <iframe src=https://copilotstudio.microsoft.com/environments/85ed9ffa-70ef-eb85-8ae4-dde84d42a617/bots/cre25_usfsPublicWebsiteBotLarry/webchat?__version__=2 frameborder="0" style="width: 100%; height: 100%;"></iframe>
+            </div>
+            <form id="continue-form">
+                <div class="rectangle-3">
+                    <div class="content-container" id="response-box"></div>
+                    <form id="chat-popup" style="display: flex;
+                    display: flex;
+                    flex-direction: row;
+                    align-items: flex-start;
+                    padding: 0px;
+                    position: absolute;
+                    width: 525px;
+                    height: 52px;
+                    left: 461px;
+                    top: 32px;">
+                        <input type="text" id="user-input-popup" name="user-input-popup" class="frame-3">
+                        <input type="submit" value="Ask!" class="asks" style="background-color: #184C23; color: white; padding: 5px 10px; border: none; cursor: pointer; font: size 18px; display: inline;">
+                    </form>
+                </div>
+            </form>
+            <div class="chat-context-buttons">
+                <div class="context-title">Chat Context:</div>
+                <div class="chat-context-button is-general selected"><img src="/static/chatbot-ui-images/specialty-icons/chaticon-generic.svg" style="width:40px;height:40px;" />General</div>
+                <div class="chat-context-button is-fs"><img src="/static/chatbot-ui-images/specialty-icons/chaticon-fs.svg" style="width:40px;height:40px;" />Forest Service</div>
+            </div>
+            
+            <button onclick="hidePopup()" style="position: absolute; top: 10px; right: 10px;">
+                <img src="/static/chatbot-ui-images/icon-close.svg" alt="Exit">
+            </button>
+        </div>
+        <script>
+            $("#chat-form").submit(function(event) {
+                event.preventDefault();
+                var userInput = $("#user-input").val();
+                $.ajax({
+                    url: '/api/chat',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        "model":"gpt-35-turbo",
+                        "messages":[
+                            {
+                                "role":"user",
+                                "content": userInput
+                            }
+                        ]
+                    }),
+                    success: function(data) {
+                        var formattedData = JSON.stringify(data).replace(/\\n/g, '<br>');
+                        $("#response-box").html(formattedData);
+                        $("#popup").show();
+                    },
+                    error: function(error) {
+                        $("#response-box").text("Error: " + error);
+                        $("#popup").show();
+                    }
+                });
+            });
+
+            $("#continue-form").submit(function(event) {
+                event.preventDefault();
+                var userInput = $("#user-input-popup").val();
+                $.ajax({
+                    url: '/api/chat',
+                    type: 'post',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        "model":"gpt-35-turbo",
+                        "messages":[
+                            {
+                                "role":"user",
+                                "content": userInput
+                            }
+                        ]
+                    }),
+                    success: function(data) {
+                        var formattedData = JSON.stringify(data).replace(/\\n/g, '<br>');
+                        $("#response-box").html(formattedData);
+                        $("#user-input-popup").val(''); // Clear input field
+                        $("#user-input-popup").focus(); // Set focus back to input field
+                    },
+                    error: function(error) {
+                        $("#response-box").text("Error: " + error);
+                    }
+                });
+            });
+        </script>
+         <script>
+            document.getElementById('user-input').addEventListener('input', function() {
+                if (this.value !== '') {
+                    document.querySelector('.ask-text').style.display = 'none';
+                } else {
+                    document.querySelector('.ask-text').style.display = 'block';
+                }
+            });
+        </script>
+        <script>
+            function hidePopup() {
+                $("#popup").hide();
+            }
+
+            var $iframe = $('#iframe-chat');
+            var $fsButton = $('.chat-context-button.is-fs');
+            var $generalButton = $('.chat-context-button.is-general');
+
+            $fsButton.click(function(){ 
+                $iframe.show();
+                $fsButton.addClass('selected');
+                $generalButton.removeClass('selected');
+            });
+            $generalButton.click(function(){ 
+                $iframe.hide();
+                $fsButton.removeClass('selected');
+                $generalButton.addClass('selected');
+            });
+        </script>
+
+        <img src="/static/chatbot-ui-images/grey-content-bottom.png" alt="grey content bottom">
+   
+</body>
+</html>
