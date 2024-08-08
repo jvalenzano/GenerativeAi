@@ -4,5 +4,5 @@ COPY . .
 RUN pip install --upgrade pip
 COPY ./Forest_Wizard/requirements.txt .
 RUN pip install  -r requirements.txt
-EXPOSE 80
+EXPOSE 8080
 CMD ["python","app.py"]
