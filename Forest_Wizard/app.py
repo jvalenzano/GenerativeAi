@@ -8,7 +8,7 @@ api_key = os.getenv('OPENAI_API_KEY')
 Ocp_Apim_Subscription_Key = '5bbf6c102d86484c818aba9d18588962'
 
 #helper function to make call to the api
-def make_post_request(json_body):
+def make_post_request_pipeline(json_body):
     """
     Makes a POST request to the specified API endpoint with the given JSON body.
 
