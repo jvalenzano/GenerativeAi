@@ -1,9 +1,10 @@
 FROM python:3.9.1-alpine
-RUN pip install --upgrade pip
+WORKDIR /Forest_Wizard
 COPY ./Forest_Wizard/requirements.txt .
 COPY ./Forest_Wizard/app.py .
-COPY ./Forest_Wizard/templates/index.html .
-COPY ./Forest_Wizard/static .
-RUN pip install  -r requirements.txt
+COPY ./Forest_Wizard/templates ./templates
+COPY ./Forest_Wizard/static ./static
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 EXPOSE 80
-CMD ["python","app.py"]
+CMD ["python", "app.py"]
