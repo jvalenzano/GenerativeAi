@@ -32,7 +32,7 @@ def make_post_request(json_body):
         if response.status_code == 200:
             return response.json()
         else:
-            return {"error": "Request failed with status code: " + str(response.status_code), "response": response.text}
+             return response.json()
     except Exception as e:
         return {"error": "An error occurred: " + str(e)}
 
@@ -42,17 +42,24 @@ def home():
     return render_template('index.html')
 
 
-#chat endpoint
-@app.route('/api/chat', methods=['POST', 'GET'])
-def chat():
+@app.route('/ai/pipeline/chat', methods=['POST', 'GET'])
+def chat_pipeline():
     json_body = request.get_json()
 
     #call helperfunction to make api call
-    response = make_post_request(json_body)
+    response = make_post_request_pipeline(json_body)
+    
 
-    #return response, just the content 
-    content = response['choices'][0]['message']['content']
-    return jsonify(content)
+     
+    if 'choices' in response:
+        #return response, just the content
+        content = response['choices'][0]['message']['content']
+        return jsonify(content)
+    else:
+         #if error return the whole response
+
+        return jsonify(response)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
