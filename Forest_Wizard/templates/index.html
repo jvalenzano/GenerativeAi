@@ -71,7 +71,7 @@
                 event.preventDefault();
                 var userInput = $("#user-input").val();
                 $.ajax({
-                    url: '/api/chat',
+                    url: '/ai/pipeline/chat',
                     type: 'post',
                     contentType: 'application/json',
                     data: JSON.stringify({
@@ -99,7 +99,7 @@
                 event.preventDefault();
                 var userInput = $("#user-input-popup").val();
                 $.ajax({
-                    url: '/api/chat',
+                    url: '/ai/pipeline/chat',
                     type: 'post',
                     contentType: 'application/json',
                     data: JSON.stringify({
