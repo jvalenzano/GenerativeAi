@@ -5,7 +5,7 @@ import os
 
 app = Flask(__name__)
 api_key = os.getenv('OPENAI_API_KEY')
-#api_key = 'e3632968ed2e48f5b1cac0b036b9affe'
+
 if not api_key:
     raise ValueError("No API key found. Please set the OPENAI_API_KEY environment variable.")
 
