@@ -29,6 +29,7 @@ def make_post_request_pipeline(json_body):
         dict: The response JSON if the request is successful, otherwise an error dictionary with the error message and response text.
     """
     
+
     
     headers = {'Ocp-Apim-Subscription-Key': Ocp_Apim_Subscription_Key, 'Content-Type': 'application/json'}
     api_url = 'https://apim-com-nonprd-poc.azure-api.net/ai-pipeline/onepromt/v1/BASE2-gpt-35-turbo?api-version=2024-02-15-preview'
@@ -38,6 +39,7 @@ def make_post_request_pipeline(json_body):
         if response.status_code == 200:
             return response.json()
         else:
+
             return response.json()
     except Exception as e:
         return {"error": "An error occurred: " + str(e)}
@@ -72,13 +74,16 @@ def make_post_request_openai(json_body):
             return response.json()
     except Exception as e:
         return {"error": "An error occurred: " + str(e)}
+      
 #landing page
 @app.route('/')
 def home():
     return render_template('index.html')
 
 
+
 #pipeline chat endpoint
+
 @app.route('/ai/pipeline/chat', methods=['POST', 'GET'])
 def chat_pipeline():
     json_body = request.get_json()
@@ -96,6 +101,7 @@ def chat_pipeline():
          #if error return the whole response
 
         return jsonify(response)
+
 
 
 @app.route('/openai/direct/chat', methods=['POST', 'GET'])
