@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="/static/style.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <img src="/static/chatbot-ui-images/grey-content-top.png" alt="grey content top">
+
+    <br>
+    <br>
+    <div class="Full-Chat-Wdiget">
+        <div class="rectangle-1">
+            <div id="iframe-chat" style ="height:300px; width:1133; margin-top:130px; left:0px;">
+                <iframe src=https://copilotstudio.microsoft.com/environments/85ed9ffa-70ef-eb85-8ae4-dde84d42a617/bots/cre25_usfsPublicWebsiteBotLarry/webchat?__version__=2 frameborder="0" style="width: 100%; height: 100%;"></iframe>
+            </div>
+            <div class="content-container" id="response-box"style ="height:200px;margin-top:150px"></div>
+            <div class="chat-context-buttons"style ="top:470px;">
+                <div class="context-title">Chat Context:</div>
+                <div class="chat-context-button is-general selected"><img src="/static/chatbot-ui-images/specialty-icons/chaticon-generic.svg" style="width:40px;height:40px;" />General</div>
+                <div class="chat-context-button is-pipeline"><img src="/static/chatbot-ui-images/specialty-icons/chaticon-pipeline.svg" style="width:40px;height:40px;" />API Pipeline</div>
+                <div class="chat-context-button is-fs"><img src="/static/chatbot-ui-images/specialty-icons/chaticon-fs.svg" style="width:40px;height:40px;" />Forest Service</div>
+            </div>
+            <div class="rectangle-2"></div>
+            <form id="chat-form-openai" style="display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 0px;
+            position: absolute;
+            width: 525px;
+            height: 52px;
+            left: 461px;
+            top: 32px;">
+            
+
+                <input type="text" id="user-input-openai" name="user-input" class="frame-3">
+                <label for="user-input-openai" class="ask-text-openai" style="left:1%;position: absolute;top: 29.41%;">Ask me anything...</label>
+                    
+                <input type="submit" value="Ask!"class="asks" style="background-color: #184C23; color: white; padding: 5px 10px; border: none; cursor: pointer; font: size 18px;">
+                
+            
+            </form>
+            <form id="chat-form-pipeline" style="display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            padding: 0px;
+            position: absolute;
+            width: 525px;
+            height: 52px;
+            left: 461px;
+            top: 32px;">
+            
+
+                <input type="text" id="user-input-pipeline" name="user-input" class="frame-3">
+                <label for="user-input-pipeline" class="ask-text-pipeline" style="left:1%;position: absolute;top: 29.41%;">Ask me anything...</label>
+                    
+                <input type="submit" value="Ask!"class="asks" style="background-color: #184C23; color: white; padding: 5px 10px; border: none; cursor: pointer; font: size 18px;">
+                
+            
+            </form>
+            
+        </div>
+        
+    </div>
+
+    <script>
+
+        /*
+         * making the api call
+         */
+        $("#chat-form-pipeline").submit(function(event) {
+            event.preventDefault();
+            var userInput = $("#user-input-pipeline").val();
+            $.ajax({
+                url: '/ai/pipeline/chat',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "model":"gpt-35-turbo",
+                    "messages":[
+                        {
+                            "role":"user",
+                            "content": userInput
+                        }
+                    ]
+                }),
+                success: function(data) {
+                    var formattedData = JSON.stringify(data).replace(/\\n/g, '<br>');
+                    $("#response-box").html(formattedData);
+                    $("#popup").show();
+                },
+                error: function(error) {
+                    $("#response-box").text("Error: " + error);
+                    $("#popup").show();
+                }
+            });
+        });
+
+        $('#chat-form-openai').submit(function(event) {
+            event.preventDefault();
+            var userInput = $("#user-input-openai").val();
+            $.ajax({
+                url: '/openai/direct/chat', 
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "model":"gpt-35-turbo",
+                    "messages":[
+                        {
+                            "role":"user",
+                            "content": userInput
+                        }
+                    ]
+                }),
+                success: function(data) {
+                    var formattedData = JSON.stringify(data).replace(/\\n/g, '<br>');
+                    $("#response-box").html(formattedData);
+                    $("#popup").show();
+                },
+                error: function(error) {
+                    $("#response-box").text("Error: " + error);
+                    $("#popup").show();
+                }
+            });
+        });
+
+        $("#continue-form").submit(function(event) {
+            event.preventDefault();
+            var userInput = $("#user-input-popup").val();
+            $.ajax({
+                url: '/AI/pipeline/chat',
+                type: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "model":"gpt-35-turbo",
+                    "messages":[
+                        {
+                            "role":"user",
+                            "content": userInput
+                        }
+                    ]
+                }),
+                success: function(data) {
+                    var formattedData = JSON.stringify(data).replace(/\\n/g, '<br>');
+                    $("#response-box").html(formattedData);
+                    $("#user-input-popup").val(''); // Clear input field
+                    $("#user-input-popup").focus(); // Set focus back to input field
+                },
+                error: function(error) {
+                    $("#response-box").text("Error: " + error);
+                }
+            });
+        });
+
+        /*
+        * Hide the ask text when user starts typing
+        */
+
+        document.getElementById('user-input-openai').addEventListener('input', function() {
+            if (this.value !== '') {
+                document.querySelector('.ask-text-openai').style.display = 'none';
+            } else {
+                document.querySelector('.ask-text-openai').style.display = 'block';
+            }
+        });
+
+        document.getElementById('user-input-pipeline').addEventListener('input', function() {
+            if (this.value !== '') {
+                document.querySelector('.ask-text-pipeline').style.display = 'none';
+            } else {
+                document.querySelector('.ask-text-pipeline').style.display = 'block';
+            }
+        });
+
+        /*
+         * Popup
+         */
+        function hidePopup() {
+            $("#popup").hide();
+        }
+
+       /*
+       * Chat context buttons
+       */
+
+        var $iframe = $('#iframe-chat');
+        var $fsButton = $('.chat-context-button.is-fs');
+        var $pipelineButton = $('.chat-context-button.is-pipeline');
+        var $generalButton = $('.chat-context-button.is-general');
+
+        $fsButton.click(function(){ 
+            $iframe.show();
+            $fsButton.addClass('selected');
+            $pipelineButton.removeClass('selected');
+            $generalButton.removeClass('selected');
+        });
+        $generalButton.click(function(){ 
+            $iframe.hide();
+            $('#chat-form-pipeline').hide(); // hide the pipeline form
+            $('#chat-form-openai').show(); // show the openai form
+            $fsButton.removeClass('selected');
+            $pipelineButton.removeClass('selected');
+            $generalButton.addClass('selected');
+        });
+        
+        $pipelineButton.click(function(){ 
+            $iframe.hide();
+            $('#chat-form-openai').hide(); // hide the openai form
+            $('#chat-form-pipeline').show(); // show the pipeline form
+            $fsButton.removeClass('selected');
+            $pipelineButton.addClass('selected');
+            $generalButton.removeClass('selected');
+        });
+      
+      /*
+       * Default to general chat
+       */
+        $generalButton.trigger('click');
+    </script>
+<img src="/static/chatbot-ui-images/grey-content-bottom.png" alt="grey content bottom" style="position: relative; top: 400px;">
+</body>
+</html>
