@@ -35,6 +35,10 @@
 
                 <input type="text" id="user-input-openai" name="user-input" class="frame-3">
                 <label for="user-input-openai" class="ask-text-openai" style="left:1%;position: absolute;top: 29.41%;">Ask me anything...</label>
+
+                            <!-- File upload input -->
+                <input type="file" id="file-upload-openai" name="file-upload">
+                
                     
                 <input type="submit" value="Ask!"class="asks" style="background-color: #184C23; color: white; padding: 5px 10px; border: none; cursor: pointer; font: size 18px;">
                 
@@ -102,7 +106,25 @@
 
         $('#chat-form-openai').submit(function(event) {
             event.preventDefault();
+
             var userInput = $("#user-input-openai").val();
+            var fileInput = document.getElementById('file-upload-openai');
+            var file = fileInput.files[0];
+
+            var formData = new FormData();
+            formData.append('test1', file);
+
+            // Send the file
+            var formDataFile = new FormData();
+            formDataFile.append('file', file);
+            $.ajax({
+                url: '/openai/direct/chat/pdf',
+                type: 'POST',
+                data: formDataFile,
+                processData: false,
+                contentType: false
+            });
+
             $.ajax({
                 url: '/openai/direct/chat', 
                 type: 'post',
