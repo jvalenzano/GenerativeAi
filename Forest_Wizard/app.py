@@ -44,7 +44,10 @@ api_key = os.getenv('OPENAI_API_KEY')
 if not api_key:
     raise ValueError("No API key found. Please set the OPENAI_API_KEY environment variable.")
 
-Ocp_Apim_Subscription_Key = '5bbf6c102d86484c818aba9d18588962'
+Ocp_Apim_Subscription_Key = os.getenv('APIM_SUBSCRIPTION_KEY')
+if not Ocp_Apim_Subscription_Key:
+    raise ValueError("No Ocp_Apim_Subscription_Key found. Please set the APIM_SUBSCRIPTION_KEY environment variable.")
+
 
 Prompt_pre_user = 'Answer only about the forest service, if the question is not about the forest service answer it in a way to relate it to the forest service. Do not provide any personal information. Do not provide any medical advice. Do not provide any legal advice. Do not provide any financial advice. Do not provide any professional advice. Do not provide any emergency services. Do not provide any crisis services. Do not provide any support for self. '
 
