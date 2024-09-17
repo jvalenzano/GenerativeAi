@@ -66,8 +66,20 @@
         </div>
         
     </div>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <script>
+
+        $(document).ready(function() {
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': 'application/json'
+                }
+            });
+        });
 
         /*
          * making the api call
@@ -78,7 +90,7 @@
             $.ajax({
                 url: '/ai/pipeline/chat',
                 type: 'post',
-                contentType: 'application/json',
+                
                 data: JSON.stringify({
                     "model":"gpt-35-turbo",
                     "messages":[
@@ -128,7 +140,6 @@
             $.ajax({
                 url: '/openai/direct/chat', 
                 type: 'post',
-                contentType: 'application/json',
                 data: JSON.stringify({
                     "model":"gpt-35-turbo",
                     "messages":[
