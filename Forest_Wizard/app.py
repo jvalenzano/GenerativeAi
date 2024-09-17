@@ -41,7 +41,7 @@ VERBS = ['VB', 'VBG', 'VBD', 'VBN', 'VBP', 'VBZ']
 
 app = Flask(__name__)
 
-app.secret_key = 'ThisAtestRunNotaRealKey'
+app.secret_key  = os.getenv('secret_key')
 csrf = CSRFProtect()
 csrf.init_app(app)
 
