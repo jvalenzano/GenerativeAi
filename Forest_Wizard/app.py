@@ -3,6 +3,7 @@ import requests
 import json
 import os 
 import nltk
+from flask_wtf.csrf import CSRFProtect
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # progress bar
@@ -39,6 +40,11 @@ VERBS = ['VB', 'VBG', 'VBD', 'VBN', 'VBP', 'VBZ']
 
 
 app = Flask(__name__)
+
+app.secret_key = 'ThisAtestRunNotaRealKey'
+csrf = CSRFProtect()
+csrf.init_app(app)
+
 api_key = os.getenv('OPENAI_API_KEY') 
 
 if not api_key:
@@ -47,6 +53,7 @@ if not api_key:
 Ocp_Apim_Subscription_Key = os.getenv('APIM_SUBSCRIPTION_KEY')
 if not Ocp_Apim_Subscription_Key:
     raise ValueError("No Ocp_Apim_Subscription_Key found. Please set the APIM_SUBSCRIPTION_KEY environment variable.")
+
 
 
 Prompt_pre_user = 'Answer only about the forest service, if the question is not about the forest service answer it in a way to relate it to the forest service. Do not provide any personal information. Do not provide any medical advice. Do not provide any legal advice. Do not provide any financial advice. Do not provide any professional advice. Do not provide any emergency services. Do not provide any crisis services. Do not provide any support for self. '
@@ -107,17 +114,14 @@ def make_post_request_pipeline(json_body):
 
     try:
         response = requests.post(api_url, headers=headers,  data=json.dumps(json_body))
-        if response.status_code == 200:
-            return response.json()
-        else:  
-            return response.json()
+        return response.json()
     except Exception as e:
         return {"error": "An error occurred: " + str(e)}
 
 
 
 #pipeline chat endpoint
-@app.route('/ai/pipeline/chat', methods=['POST', 'GET'])
+@app.route('/ai/pipeline/chat', methods=['POST'])
 def chat_pipeline():
     json_body = request.get_json()
 
@@ -176,7 +180,7 @@ def make_post_request_openai(json_body):
         return {"error": "An error occurred: " + str(e)}
 
 
-@app.route('/openai/direct/chat', methods=['POST', 'GET'])
+@app.route('/openai/direct/chat', methods=['POST'])
 def chat_openai():
     json_body = request.get_json()
 
@@ -192,7 +196,7 @@ def chat_openai():
         return jsonify(response)
 
 #File reader endpoint for openai
-@app.route('/openai/direct/chat/pdf', methods=['POST', 'GET'])
+@app.route('/openai/direct/chat/pdf', methods=['POST'])
 def openai_read_file(): 
     global is_file
     global temp_filtered_list
@@ -211,9 +215,6 @@ def openai_read_file():
                 temp_filtered_list = data
 
                 is_file= False
-                #print(data)
-
-                #print('\n \n\n\n\n\n\n\nDATA RECEIVED AND PROCESSED')
                 return 'testing'
         is_file = False
         return 'No file found'
@@ -226,7 +227,6 @@ def openai_read_file():
 @app.route('/')
 def home():
     return render_template('index.html')
-
 
 
 if __name__ == '__main__':
