@@ -172,10 +172,7 @@ def make_post_request_openai(json_body):
     api_url = 'https://oai-nonprd-openai-poc-01.openai.azure.com/openai/deployments/BASE2-gpt-35-turbo/chat/completions?api-version=2024-02-15-preview&api-key='+api_key
     try:
         response = requests.post(api_url, headers=headers,  data=json.dumps(json_body))
-        if response.status_code == 200:
-            return response.json()
-        else:
-            return response.json()
+        return response.json()
     except Exception as e:
         return {"error": "An error occurred: " + str(e)}
 
