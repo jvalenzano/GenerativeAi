@@ -1,7 +1,12 @@
 from flask import Flask, request, jsonify
 import requests
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
+
+app.secret_key  = os.getenv('secret_key')
+csrf = CSRFProtect()
+csrf.init_app(app)
 BASE_URL = 'https://oai-nonprd-openai-poc-01.openai.azure.com'
 
 @app.route('/ai/chatbot/onepromt/v1/<deployment_id>', methods=['POST', "OPTIONS"])
