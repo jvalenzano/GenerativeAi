@@ -8,6 +8,7 @@ COPY ./Forest_Wizard/static ./static
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 RUN chown -R nonroot:nonroot /Forest_Wizard
+RUN chmod +x /Forest_Wizard/app.p
 USER nonroot
 EXPOSE 80
 CMD ["python", "app.py"]
