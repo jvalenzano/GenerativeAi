@@ -9,7 +9,7 @@ csrf = CSRFProtect()
 csrf.init_app(app)
 BASE_URL = 'https://oai-nonprd-openai-poc-01.openai.azure.com'
 
-@app.route('/ai/chatbot/onepromt/v1/<deployment_id>', methods=['POST', "OPTIONS"])
+@app.route('/ai/chatbot/onepromt/v1/<deployment_id>', methods=['POST'])
 def chat(deployment_id):
     received_body = request.json  # Assuming the body is in JSON format
     
