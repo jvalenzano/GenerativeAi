@@ -87,6 +87,28 @@ def tokenize_and_stopwords(data):
     print(f"There are {len(filtered_list)} remaining words after cleaning them up.")
     return filtered_list
 
+
+
+def summarize_text(json_body):
+    """
+    Summarizes the given text using the OpenAI API.
+
+    Args:
+        json_body (dict): The JSON body to be sent in the request.
+
+    Returns:
+        dict: The response JSON if the request is successful, otherwise an error dictionary with the error message and response text.
+    """
+
+    headers = {'Content-Type': 'application/json'}
+    api_url = 'https://oai-nonprd-openai-poc-01.openai.azure.com/openai/deployments/BASE2-gpt-35-turbo/chat/completions?api-version=2024-02-15-preview&api-key='+api_key
+    try:
+        response = requests.post(api_url, headers=headers,  data=json.dumps(json_body))
+        return response.json()
+    except Exception as e:
+        return {"error": "An error occurred: " + str(e)}
+    
+
 #####################################
 #####################################
 #OpenAI APIM API call
@@ -147,7 +169,8 @@ def chat_pipeline():
 
 
 def make_post_request_openai(json_body):
-    if(is_file):
+    while(is_file):
+        print('waiting for file to be read')
         time.sleep(1)
     """
     Makes a POST request to the specified openAI endpoint with the given JSON body.
@@ -209,8 +232,41 @@ def openai_read_file():
                 
                     
                 data = tokenize_and_stopwords(data)
-                temp_filtered_list = data
+                print("Data is tokenized\n\n")
+                print(f"There are {len(data)} words in the file.\n\n")
+                chunks = [data[i:i + 3000] for i in range(0, len(data), 3000)]
+                for chunk in chunks:
+                    print("Chunking the data\n\n")
+                    chunk_text = ' '.join(chunk)
+                    summarized_chunk = summarize_text({
+                        'messages': [
+                            {'role': 'system', 'content': 'You are a helpful assistant.'},
+                            {'role': 'user', 'content': 'Please summarize the following text: ' + chunk_text}
+                        ]
+                    })
+                    print(summarized_chunk)
+                    if 'choices' in summarized_chunk:
+                        print("adding the summarized text to the list\n\n")
+                        summarized_text = summarized_chunk['choices'][0]['message']['content']
+                        temp_filtered_list.append(summarized_text)
+                        print(temp_filtered_list)
 
+                # Continue to summarize the text until the total number of tokens is less than or equal to 3000
+                while len(word_tokenize(' '.join(temp_filtered_list))) > 3000:
+                    chunks = [temp_filtered_list[i:i + 3000] for i in range(0, len(temp_filtered_list), 3000)]
+                    temp_filtered_list = []
+                    for chunk in chunks:
+                        chunk_text = ' '.join(chunk)
+                        summarized_chunk = summarize_text({
+                            'messages': [
+                                {'role': 'system', 'content': 'You are a helpful assistant.'},
+                                {'role': 'user', 'content': 'Please summarize the following text: ' + chunk_text}
+                            ]
+                        })
+                        if 'choices' in summarized_chunk:
+                            summarized_text = summarized_chunk['choices'][0]['message']['content']
+                            temp_filtered_list.append(summarized_text)
+                            print(temp_filtered_list)
                 is_file= False
                 return 'testing'
         is_file = False
