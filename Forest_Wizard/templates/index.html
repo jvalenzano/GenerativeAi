@@ -45,6 +45,7 @@
                 
             
             </form>
+      
             <form id="chat-form-pipeline" style="display: flex;
             flex-direction: row;
             align-items: flex-start;
@@ -77,7 +78,6 @@
             $.ajaxSetup({
                 headers: {
                     'X-CSRFToken': csrfToken,
-                    'Content-Type': 'application/json'
                 }
             });
         });
@@ -88,10 +88,11 @@
         $("#chat-form-pipeline").submit(function(event) {
             event.preventDefault();
             var userInput = $("#user-input-pipeline").val();
+
             $.ajax({
                 url: '/ai/pipeline/chat',
                 type: 'post',
-                
+                contentType: 'application/json',
                 data: JSON.stringify({
                     "model":"gpt-35-turbo",
                     "messages":[
@@ -116,31 +117,48 @@
                 }
             });
         });
-
         $('#chat-form-openai').submit(function(event) {
             event.preventDefault();
 
             var userInput = $("#user-input-openai").val();
-            var fileInput = document.getElementById('file-upload-openai');
+
+            // File upload
+            var fileInput = $('#file-upload-openai')[0];
+            if (!fileInput) {
+                console.log('File input not found');
+                return;
+            }
+
+            console.log('File input found', fileInput);
+
             var file = fileInput.files[0];
+            if (!file) {
+                console.log('No file selected');
+                return;
+            }
+
+            console.log('File selected', file);
 
             var formData = new FormData();
-            formData.append('test1', file);
+            formData.append('file', file);
 
-            // Send the file
-            var formDataFile = new FormData();
-            formDataFile.append('file', file);
             $.ajax({
                 url: '/openai/direct/chat/pdf',
                 type: 'POST',
-                data: formDataFile,
+                data: formData,
                 processData: false,
-                contentType: false
+                contentType: false,
+                success: function(response) {
+                    console.log(response);
+                }
             });
 
+            // Chat form
             $.ajax({
+                
                 url: '/openai/direct/chat', 
                 type: 'post',
+                contentType: 'application/json',  
                 data: JSON.stringify({
                     "model":"gpt-35-turbo",
                     "messages":[
