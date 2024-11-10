@@ -1,0 +1,7 @@
+#screen watch -n .25 "ls -arlh /export/projects/socom/aops_data/l3mapgen/tests/*.out | head -2"
+screen watch -n 1 "nvidia-smi"
+split
+focus down
+#screen dstat -tcndylp --top-cpu 1
+screen htop --filter="ML-0"
+focus bottom

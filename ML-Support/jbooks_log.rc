@@ -1,0 +1,8 @@
+#To quit, it's Ctrl-a + \ 
+#screen watch -n .25 "ls -arlh /export/projects/socom/aops_data/l3mapgen/tests/*.out | head -2"
+screen tail -f ./the2021Log.log
+split -v
+focus right
+#screen dstat -tcndylp --top-cpu 1
+screen tail -f ./the2023Log.log
+focus bottom
