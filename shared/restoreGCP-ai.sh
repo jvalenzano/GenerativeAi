@@ -56,7 +56,7 @@ typeset -A JOB;
 #    |_|    \___/|_| \_|\____| |_| |___\___/|_| \_|____/ 
 #############################################################
 
-job_stop () {
+function job_stop {
 
     if [ ! -z "${PBS_JOBNAME}" ];
     then
@@ -72,7 +72,7 @@ job_stop () {
 
 }
 
-job_start () {
+function job_start {
 
     if [ ! -z "${PBS_JOBNAME}" ];
     then
@@ -88,11 +88,11 @@ job_start () {
 
 }
 
-get_ISO8601_full () {
+function get_ISO8601_full {
 	funct_result=$(date +'%Y-%m-%d %H:%M:%S')
 }
 
-job_complete () {
+function job_complete {
 
     if [ ! -z "${PBS_JOBNAME}" ];
     then
@@ -108,15 +108,15 @@ job_complete () {
 
 }
 
-get_date () {
+function get_date {
 	funct_result=$(date +'%Y%m%d:%H%M')
 }
 
-get_ISO8601 () {
+function get_ISO8601 {
 	funct_result=$(date +'%Y%m%d')
 }
 
-banner () {
+function banner {
     #================================================================
     # General function to display a banner, when desired, per 
     # function call.
@@ -138,25 +138,9 @@ banner () {
 
 }
 
-#------------------------------------------------------------------------------#
-# CONFIGURATION IDENTIFICATION:
-# $HeadURL$
-# @(#)$Id$
-#BOP --------------------------------------------------------------------------#
-#
-# !ROUTINE: msg_info
-#
-# !DESCRIPTION:
-#   To printf info message to stderr (prefixed with INFO).
-#   Assumes FPATH and Ksh utilization, if not understood research before use.
-#
-# !INPUT PARAMETERS:
-#   1+(in) : message to printf
-#
-#EOP --------------------------------------------------------------------------#
-msg_info () {
+function msg_info {
 
-  echo "Entered msg_info"
+  #echo "Entered msg_info"
   export spacing=6;
   if [[ -n "$no_date_prefix" ]]
   then
@@ -166,36 +150,10 @@ msg_info () {
   fi
   typeset prefix="${d}"
   typeset type="INFO:"
-  while [[ $# != 0 ]]
-  do
-    printf "$1" | {
-      while read -r line
-      do
-#        printf "${prefix} $line" 1>&2
-         printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$line" 1>&2
-      done
-    }
-    shift
-  done
+  printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$1" 1>&2
 }
 
-#------------------------------------------------------------------------------#
-# CONFIGURATION IDENTIFICATION:
-# $HeadURL$
-# @(#)$Id$
-#BOP --------------------------------------------------------------------------#
-#
-# !ROUTINE: msg_debug
-#
-# !DESCRIPTION:
-#   To printf debug message to stderr (prefixed with DEBUG).
-#   Assumes FPATH and Ksh utilization, if not understood research before use.
-#
-# !INPUT PARAMETERS:
-#   1+(in) : message to printf
-#
-#EOP --------------------------------------------------------------------------#
-msg_debug () {
+function msg_debug {
   export spacing=6;
   if [[ -n "$no_date_prefix" ]]
   then
@@ -205,37 +163,11 @@ msg_debug () {
   fi
   typeset prefix="${d}"
   typeset type="DEBUG:"
-  while [[ $# != 0 ]]
-  do
-    printf "$1" | {
-      while read -r line
-      do
-        #printf "${prefix} $line" 1>&2
-        printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$line" 1>&2
-      done
-    }
-    shift
-  done
+  printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$1" 1>&2
 }
 
 
-#------------------------------------------------------------------------------#
-# CONFIGURATION IDENTIFICATION:
-# $HeadURL$
-# @(#)$Id$
-#BOP --------------------------------------------------------------------------#
-#
-# !ROUTINE: msg_emerg
-#
-# !DESCRIPTION:
-#   printf fatal / emergency message and exit script.
-#   Assumes FPATH and Ksh utilization, if not understood research before use.
-#
-# !INPUT PARAMETERS:
-#   1+(in) : message to printf
-#
-#EOP --------------------------------------------------------------------------#
-msg_emerg () {
+function msg_emerg {
   export spacing=6;
   if [[ -n "$no_date_prefix" ]]
   then
@@ -245,37 +177,11 @@ msg_emerg () {
   fi
   typeset prefix="${d}"
   typeset type="EMERG:"
-  while [[ $# != 0 ]]
-  do
-    printf "$1" | {
-      while read -r line
-      do
-#        printf "${prefix} $line" 1>&2
-         printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$line" 1>&2
-      done
-    }
-    shift
-  done
+  printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$1" 1>&2
   exit 128;
 }
 
-#------------------------------------------------------------------------------#
-# CONFIGURATION IDENTIFICATION:
-# $HeadURL$
-# @(#)$Id$
-#BOP --------------------------------------------------------------------------#
-#
-# !ROUTINE: msg_error
-#
-# !DESCRIPTION:
-#   To printf error message to stderr (prefixed with ERROR).
-#   Assumes FPATH and Ksh utilization, if not understood research before use.
-#
-# !INPUT PARAMETERS:
-#   1+(in) : message to printf
-#
-#EOP --------------------------------------------------------------------------#
-msg_error () {
+function msg_error {
   export spacing=6;
   if [[ -n "$no_date_prefix" ]]
   then
@@ -285,36 +191,10 @@ msg_error () {
   fi
   typeset prefix="${d}"
   typeset type="ERROR:"
-  while [[ $# != 0 ]]
-  do
-    printf "$1" | {
-      while read -r line
-      do
-#        printf "${prefix} $line" 1>&2
-         printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$line" 1>&2
-      done
-    }
-    shift
-  done
+  printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$1" 1>&2
 }
 
-#------------------------------------------------------------------------------#
-# CONFIGURATION IDENTIFICATION:
-# $HeadURL$
-# @(#)$Id$
-#BOP --------------------------------------------------------------------------#
-#
-# !ROUTINE: msg_warning
-#
-# !DESCRIPTION:
-#   To printf warning message to stderr (prefixed with WARNING).
-#   Assumes FPATH and Ksh utilization, if not understood research before use.
-#
-# !INPUT PARAMETERS:
-#   1+(in) : message to printf
-#
-#EOP --------------------------------------------------------------------------#
-msg_warning () {
+function msg_warning {
   export spacing=6;
   if [[ -n "$no_date_prefix" ]]
   then
@@ -324,17 +204,7 @@ msg_warning () {
   fi
   typeset prefix="${d}"
   typeset type="WARN:"
-  while [[ $# != 0 ]]
-  do
-    printf "$1" | {
-      while read -r line
-      do
-#        printf "${prefix} $line" 1>&2
-         printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$line" 1>&2
-      done
-    }
-    shift
-  done
+  printf "%s%+${spacing}s %s\\n" "${prefix}" "$type" "$1" 1>&2
 }
 
 #############################################################
@@ -350,7 +220,7 @@ msg_warning () {
 # @stdout None
 #
 # @see main
-validate_arguments () {
+function validate_arguments {
 
     execute=1;
     if [ -z "${config}" ];
@@ -379,7 +249,7 @@ validate_arguments () {
 # @noargs
 #
 # @see main
-validate () {
+function validate {
 
     #==============================================================================="
     #-- Validate conditions for success
@@ -399,25 +269,40 @@ validate () {
 # @noargs
 #
 # @see main
-prep () {
+function prep {
 
 
     #==============================================================================="
     #-- used to "prepare" whatever is necessary prior to run (full blown execution).
     #==============================================================================="
-    banner "template:prep";
+    banner "prep";
 
     msg_info "Making save folders:"
-    mkdir -p "${DATA_FOLDER}";
-    mkdir -p "${WORK_FOLDER}";
+    if [ ! -d "${DATA_FOLDER}" ];
+    then
+        msg_debug "...creating ${DATA_FOLDER}";
+        mkdir -p "${DATA_FOLDER}";
+    else
+        msg_debug "...verified ${DATA_FOLDER}";
+    fi
+
+    if [ ! -d "${WORK_FOLDER}" ];
+    then
+        msg_debug "...creating ${WORK_FOLDER}";
+        mkdir -p "${WORK_FOLDER}";
+    else
+        msg_debug "...verified ${WORK_FOLDER}";
+    fi
 
     #attempt to moung Google Cloud Storage
-    EXE_GCS_MOUNTPOINT="~/bin/mountGCS-checkpoint.sh"
-    if [ -f "${EXE_GCS_MOUNTPOINT}" ];
+    EXE_GCS_MOUNTPOINT="/home/jupyter/bin/mountGCS-checkpoint.sh"
+    if [ ! -f ${EXE_GCS_MOUNTPOINT} ];
     then
-        ${EXE_GCS_MOUNTPOINT};
-    else
         msg_warning "${EXE_GCS_MOUNTPOINT} not found, check your configuration.";
+    else
+        msg_debug "... invoking ${EXE_GCS_MOUNTPOINT}";
+        msg_debug "... ensure your ~/.bashrc* is updated accordingly.";
+        ${EXE_GCS_MOUNTPOINT};
     fi
     msg_debug "";
 
@@ -430,24 +315,27 @@ prep () {
 # @noargs
 #
 # @see main
-run () {
+function run  {
 
     #==============================================================================="
     #-- Execute main mechanism
     #==============================================================================="
-    banner "template:run";
+    banner "run";
     export OUT_DATE="";
     get_ISO8601;
-    OUT_DATE="${funct_result}";
-    msg_debug "${OUT_DATE}";
+    export OUT_DATE="${funct_result}";
 	export root_dir=$(pwd)
 
     msg_info "Creating repositories"
     export COUNTER=0
     for repo in "${repos[@]}"
     do
-      if [ -d "${WORK_FOLDER}/${repos_names[$COUNTER]}" ];
+      if [ ! -d "${WORK_FOLDER}/${repos_names[$COUNTER]}" ];
       then
+          msg_debug "...git clone ${repo} ${WORK_FOLDER}/${repos_names[$COUNTER]}";
+          git clone "${repo} ${WORK_FOLDER}/${repos_names[$COUNTER]}";
+      else
+          banner "${repos_names[$COUNTER]}"
           msg_debug "... cd ${WORK_FOLDER}/${repos_names[$COUNTER]}";
           cd "${WORK_FOLDER}/${repos_names[$COUNTER]}";
           msg_debug "... git fetch";
@@ -456,23 +344,25 @@ run () {
           git pull;
           msg_debug "... returning to ${root_dir}";
           cd $root_dir;
-      else
-          msg_debug "...git clone ${repo} ${WORK_FOLDER}/${repos_names[$COUNTER]}";
-          git clone "${repo} ${WORK_FOLDER}/${repos_names[$COUNTER]}";
       fi
+      msg_debug ""
+      msg_debug ""
       (( COUNTER++ ))
     done
 
 
-    msg_debug "gsutil of target bucket to local machine..."
-    msg_debug "...gsutil -m cp -r gs://${TARGET_BUCKET}/ ${DATA_FOLDER}"
-    gsutil -m cp -r "gs://${TARGET_BUCKET}/" "${DATA_FOLDER}"
+    msg_debug "No longer copying data files, assumption is mounting of GCS."
+    #msg_debug "gsutil of target bucket to local machine..."
+    #msg_debug "...gsutil -m cp -r gs://${TARGET_BUCKET}/ ${DATA_FOLDER}"
+    #gsutil -m cp -r "gs://${TARGET_BUCKET}/" "${DATA_FOLDER}"
 
     msg_info ".RC file copy:"
     for config in "${configs_to_copy[@]}"
     do
+        msg_debug "...backing up ~/${config} to ~/${config}_${OUT_DATE}";
+        mv ~/${config} ~/${config}_${OUT_DATE};
         msg_debug "...copying ${config} to ~";
-        cp "$WORK_FOLDER/my_configs/${config}" ~;
+        cp $WORK_FOLDER/my_configs/${config} ~;
     done
 }
 
@@ -483,12 +373,12 @@ run () {
 # @noargs
 #
 # @see main
-post () {
+function post {
 
     #==============================================================================="
     #-- Perform clean-up functions appropriate for biocast completion
     #==============================================================================="
-    banner "template:post";
+    banner "post";
     msg_debug "Consider post cleanup functions completed.";
     job_complete "${this_script}";
 
@@ -522,8 +412,6 @@ fi
 #==============================================================================="
 #-- EXECUTE"
 #==============================================================================="
-msg_info "BEGIN"
-
 prep
 validate
 run
