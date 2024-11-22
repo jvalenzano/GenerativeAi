@@ -3,6 +3,11 @@
 #Most secure cross platform method
 #sudo $(which conda) env export --no-builds  --name machine_learning_gpu > ./archless_environment.yml;
 
+#conda deactivate;
+#conda env update -f whatever.yml --prune;
+#conda activate my_environment_name; # Must be AFTER the conda env update line!
+#Reference: https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#updating-an-environment
+
 
 #>>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!

@@ -1,6 +1,8 @@
 #!/usr/bin/bash
-#https://cloud.google.com/blog/topics/developers-practitioners/cloud-storage-file-system-vertex-ai-workbench-notebooks/
-#https://cloud.google.com/storage/docs/cloud-storage-fuse/cli-options
+
+#References:
+#    https://cloud.google.com/blog/topics/developers-practitioners/cloud-storage-file-system-vertex-ai-workbench-notebooks/
+#    https://cloud.google.com/storage/docs/cloud-storage-fuse/cli-options
 
 export EXE_GCSFUSE="/usr/bin/gcsfuse";
 export GCS_BUCKET="usfs-gcp-rand-test3-data-usc1";
@@ -26,8 +28,8 @@ fi
 status=$( gcsfuse --implicit-dirs --rename-dir-limit=100 --max-conns-per-host=100 "${GCS_BUCKET}" "${GCS_MOUNT_POINT}" );
 #status=$( ${EXE_GCSFUSE} "${GCS_BUCKET}" "${GCS_MOUNT_POINT}" );
 echo "Mount Status of:";
-    echo "------------------------------------------------";
-    echo " ${status}";
-    echo "------------------------------------------------";
+echo "------------------------------------------------";
+echo " ${status}";
+echo "------------------------------------------------";
 
-ls -alFh "${GCS_MOUNT_POINT}"
+#ls -alFh "${GCS_MOUNT_POINT}"
