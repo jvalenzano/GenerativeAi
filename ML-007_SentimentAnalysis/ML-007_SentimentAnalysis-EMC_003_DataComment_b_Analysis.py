@@ -86,7 +86,7 @@ debug_lib_location = Path("../ML-Support")
 sys.path.append(str(debug_lib_location))
 import debug
 
-libraries=["transformers", "langchain", "backoff","python-dotenv",
+libraries=["transformers", "langchain", "backoff","python-dotenv", "openai", "unidecode", 
            "alive-progress", "tqdm", "pyspellchecker", "wordcloud", "langchain", "icecream", "numba", 
            "fitz","dataclasses", "commonregex", "transformers", "spacy", "PyMuPDF", "PyPDF2", "pdfminer", 
            "pdfplumber","pdf2image","pytesseract"]    
@@ -846,7 +846,7 @@ def output_csv(inc_filename:str, inc_df: pd.DataFrame) -> None:
     
     output_filename=inc_filename
     debug.msg_debug(f"Saving the data to a file ({output_filename}).")
-    inc_df.to_csv(output_filename, sep=DELIM, header=True, index=False)
+    inc_df.to_csv(output_filename, sep="^", header=True, index=False)
     
 
 
@@ -867,10 +867,16 @@ def output_excel(inc_filename:str, inc_df: pd.DataFrame) -> None:
 
 def output_data(data_version_release: str, inc_df:pd.DataFrame)-> None:
         #save to textual output
-        target_directory=OUTPUT_DIR
-        target_filename=f"{target_directory}/{data_version_release}/{data_version_release}" + "_output.csv"    
-        if not os.path.isdir(target_directory):
-            os.mkdir(target_directory)        
+        target_directory=OUTPUT_DIR+os.sep+f"{data_version_release}"
+        target_filename=f"{target_directory}/{data_version_release}" + "_output.csv"    
+        try:
+            if not os.path.isdir(target_directory):
+                os.makedirs(target_directory)        
+        except (IOError, Exception)  as e:    
+            debug.msg_warning("FAILED to create the target directory ({target_directory}).")
+            process_exception(e)
+            raise SystemError
+
         try:
             output_csv(target_filename, inc_df)
         except (pickle.UnpicklingError, FileNotFoundError, IOError, Exception)  as e:    
@@ -1027,8 +1033,10 @@ if __name__ == "__main__":
     EVALUATION_RECORDS=10
     ERROR_PHRASE = 'Error code: 400'
     OPENAI_RESULT="ResultOPENAI"
-    DATA_DIR=f"/home/jupyter/projects/data/{BUCKET_ID}/source_data/nlp/{VERSION_NAME}"
-    OUTPUT_DIR=f"/home/jupyter/projects/data/{BUCKET_ID}/working_data/{VERSION_NAME}"
+    #DATA_DIR=f"/home/jupyter/projects/data/{BUCKET_ID}/source_data/nlp/{VERSION_NAME}"
+    DATA_DIR=f"/home/jupyter/projects/gcs/source_data/nlp/{VERSION_NAME}"
+    OUTPUT_DIR=f"/home/jupyter/projects/gcs/working_data/{VERSION_NAME}"
+    DELIM="^"
     
     
     ############################################
