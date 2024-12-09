@@ -1,7 +1,7 @@
 ##############################################
-#Imports
-##############################################
-#Ask Chris if he wants debug to be pulled in.
+# Imports
+# #############################################
+# Ask Chris if he wants debug to be pulled in.
 import os
 import datetime
 import gc
@@ -122,7 +122,6 @@ from commonregex import btc_address
 import spacy
 from spacy.language import Language
 from spacy.tokens import Doc
-nlp = spacy.load("en_core_web_trf")
 import en_core_web_trf
 
 #debug.msg_debug("...hugging face model support.")
@@ -151,13 +150,13 @@ except ImportError as ie:
     #debug.msg_warning(f"...{repr(ie)}")
     pass
 
-# try:
-#     #debug.msg_debug("...CUDF")    
-#     #import cudf
-# except ImportError as ie:
-#     #debug.msg_warning("Failed to import cudf, likely don't have a GPU")
-#     #debug.msg_warning(f"...{repr(ie)}")
-#     pass
+try:
+    debug.msg_debug("...CUDF")    
+    import cudf
+except ImportError as ie:
+    debug.msg_warning("Failed to import cudf, likely don't have a GPU")
+    debug.msg_warning(f"...{repr(ie)}")
+    pass
 
 try:
     #debug.msg_debug("...Torch")    
@@ -172,60 +171,29 @@ import pandas as pd
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #- NLTK required resources
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#debug.msg_debug("...natural language processing.")
 import nltk
-from nltk.stem import PorterStemmer  # A word stemmer based on the Porter stemming algorithm.  Porter, M. "An algorithm for suffix stripping." Program 14.3 (1980): 130-137.
-from nltk.stem import WordNetLemmatizer
-from nltk import pos_tag
-from nltk.tree import tree
-#from nltk.book import *
-from nltk import FreqDist
 from nltk import sent_tokenize, word_tokenize
-from nltk.corpus import stopwords    
 
-nltk.download('punkt')
-nltk.download("words")
-nltk.download("stopwords")
-#nltk.download('averaged_perceptron_tagger')      #looks like you have to download select neural layers for specific functions, head to read the erorr output to learn this.
 
-############################################
-# NLTK instantiation
-############################################
-#debug.msg_debug(f"...StopWords instantiated.")
-stop_words = set(stopwords.words("english"))
-#debug.msg_debug(f"...PortStemmer instantiated.")
-stemmer = PorterStemmer()
-#debug.msg_debug(f"...Lemmatizer instantiated.")
-lemmatizer = WordNetLemmatizer()
 
-SPELL_CHECK_DISTANCE=2
+
+###############################################################
+# Varibles that need to be turned into constants stored in the .env file
+
+ENCODING  ="utf-8"
 TEXT_WIDTH=77
-
-    
-#spell checker
-spell = SpellChecker(distance=SPELL_CHECK_DISTANCE)
-    
-#setup the text wrapper
-#debug.msg_debug(f"...Text Wrapper instantiated.")
-wrapper = textwrap.TextWrapper(width=TEXT_WIDTH)
-    
-BOLD_START = "\033[1m"
+BOLD_START = "\033[1m"   
 BOLD_END = "\033[0;0m"
 
 
-the_endpoint=os.getenv("OPENAI_USFS_API_BASE")
-the_key=os.getenv("OPENAI_USFS_API_KEY")
-the_version=os.getenv("OPENAI_USFS_API_VERSION")
-openai.api_key = the_key
-if the_endpoint:
-    openai.api_base = the_endpoint
-    if the_version:
-        openai.api_base = f"{the_endpoint}/{the_version}"
 
-        
+""
+
+
+
 ###############################################################
 # Helper functions
-###############################################################
+# ##############################################################
 class BoundBox:
 	def __init__(self, xmin, ymin, xmax, ymax, objness = None, classes = None):
 		self.xmin = xmin
@@ -254,6 +222,9 @@ def _sigmoid(x):
 	return 1. / (1. + np.exp(-x))
 
 def process_exception(inc_exception) -> None:
+
+
+    
     print(f"{BOLD_START}(Exception encountered):{BOLD_END} {type(inc_exception).__name__}")
     print(f"Details: {str(inc_exception)}")
     print("Traceback:")
@@ -261,66 +232,70 @@ def process_exception(inc_exception) -> None:
 
 ##############################################
 # Helper FUnctions end
-##############################################
+# #############################################
 
 
 
 ##############################################
-#data_clean
-##############################################
+# data_clean
+# #############################################
 
 
 def clean_date(inc_str: str) -> str:
-    resumeText = re.sub('httpS+s*', ' ', inc_str)  # remove URLs
-    resumeText = re.sub('RT|cc', ' ', resumeText)  # remove RT and cc
-    resumeText = re.sub('#S+', '', resumeText)  # remove hashtags
-    resumeText = re.sub('@S+', '  ', resumeText)  # remove mentions
-    resumeText = re.sub(r'\r', '', resumeText)
-    resumeText = re.sub(r'\n', '', resumeText)
-    resumeText = re.sub(' +', ' ', resumeText)  # remove extra whitespace
-    resumeText = re.sub(r'\t', ' ', resumeText)  # remove tabs
+    text = re.sub(r'http\S+', '', inc_str)  # remove URLs
+    text = re.sub(r'#\S+', '', text)  # remove hashtags
+    text = re.sub(r'@\S+', '', text)  # remove mentions
+    text = re.sub(r'\r', '', text)  # remove carriage returns
+    text = re.sub(r'\n', '', text)  # remove newlines
+    text = re.sub(r'\t', ' ', text)  # remove tabs
 
-    resumeText = resumeText.rstrip()
-    resumeText = resumeText.lstrip()
-    resumeText = re.sub('[%s]' % re.escape("""!"#$%&'()*+,.:;<=>?@[]^_`{|}~"""), ' ', resumeText)  # remove punctuations
 
-    resumeText = re.sub(r'\W+', ' ', resumeText)
-    resumeText = re.sub(' +', ' ', resumeText)
-    return resumeText
+    text = text.strip()  # strip leading and trailing whitespace
+    text = re.sub('[%s]' % re.escape("""!"#$%&'()*+,.:;<=>?@[]^_`{|}~"""), '', text)  # remove punctuations, leave slashes and dashes 
+
+    text = re.sub(r'\W+', ' ', text)
+    text = re.sub(' +', ' ', text)
+    return text
 
 def clean_json(inc_str: str) -> str:
     text = re.sub(r'\r', '', inc_str)
     text = re.sub(r'\n', '', text)
-    text = re.sub(' +', ' ', text) # remove extra whitespace
     text = re.sub(r'\t', ' ', text) #remove tabs
-    text.rstrip()
-    text.lstrip()
+    
     text = re.sub('[%s]' % re.escape("""#*'"""), ' ', text)  # remove punctuations
+    text = re.sub(' +', ' ', text) # remove extra whitespace
+
+    text = text.strip()  # strip leading and trailing whitespace
+
     return text
 
-def clean_lemmatizer_words(inc_str:str) -> str:
-    filtered_list = []
+
+#lemetizing verbs cuases it to change 'the cats are running' to 'The cats be run'
+def clean_lemmatizer_words(inc_str: str, lemmatizer) -> str:
     response=word_tokenize(inc_str)
     wordlist = [x for x in response if (len(x)>=2 and x.isalpha())]
-    lemmatized_words = [lemmatizer.lemmatize(word) for word in wordlist]
+    lemmatized_words = [lemmatizer.lemmatize(word.lower(), 'v') for word in wordlist]
+    if lemmatized_words:
+        lemmatized_words[0] = lemmatized_words[0].capitalize()
+
     return str(' '.join(lemmatized_words))
 
 
-def clean_stem_words(inc_str:str) -> str:
+def clean_stem_words(inc_str:str,stemmer) -> str:
     filtered_list = []
     response=word_tokenize(inc_str)
     wordlist = [x for x in response if (len(x)>=2 and x.isalpha())]
     stemmed_words = [stemmer.stem(word) for word in wordlist]
     return str(' '.join(stemmed_words))
 
-def clean_stop_words(inc_str:str) -> str:
+def clean_stop_words(inc_str:str,stop_words) -> str:
     filtered_list = []
-    response=word_tokenize(inc_str)
-    wordlist = [x for x in response if (len(x)>=2 and x.isalpha())]
+    response = word_tokenize(inc_str)
+    wordlist = [x for x in response if len(x) >= 2 and x.isalpha()]
     for word in wordlist:
         if word.casefold() not in stop_words:
-          filtered_list.append(word)
-    return str(' '.join(filtered_list))
+            filtered_list.append(word)
+    return ' '.join(filtered_list)
 
 def clean_string(inc_str: str) -> str:
     """
@@ -330,28 +305,28 @@ def clean_string(inc_str: str) -> str:
     @returns: str - Transformed text with extra spaces removed and cleaned.
     """
     text = re.sub(r'http\S+', ' ', inc_str)  # remove URLs
-    text = re.sub(r'RT|cc', ' ', text)  # remove RT and cc
     text = re.sub(r'#\S+', '', text)  # remove hashtags
     text = re.sub(r'@\S+', '  ', text)  # remove mentions
-    text = re.sub(r'\r', '', text)  # remove carriage returns
-    text = re.sub(r'\n', '', text)  # remove newlines
+    text = re.sub(r'\r', ' ', text)  # remove carriage returns
+    text = re.sub(r'\n', ' ', text)  # remove newlines
     text = re.sub(r'\t', ' ', text)  # remove tabs
 
-    text = text.strip()  # strip leading and trailing whitespace
     text = re.sub(r'[%s]' % re.escape("""!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"""), ' ', text)  # remove punctuations
     text = ''.join([i if ord(i) < 128 else ' ' for i in text])  # remove non-ASCII characters
 
     text = re.sub(r'\W+', ' ', text)  # remove non-word characters
     text = re.sub(r' +', ' ', text)  # remove extra whitespace again
     
+    text = text.strip()  # strip leading and trailing whitespace
+    
     return text
 
   
-def cleanse_string(inc_str: str) -> str:
+def cleanse_string(inc_str: str,stop_words,stemmer,lemmatizer) -> str:
     response=clean_string(inc_str)
-    response=clean_stop_words(response)
-    response=clean_stem_words(response)
-    response=clean_lemmatizer_words(response)
+    response=clean_stop_words(response,stop_words)
+    response=clean_stem_words(response,stemmer)
+    response=clean_lemmatizer_words(response,lemmatizer)
     response=word_tokenize(response)
     return response
 
@@ -372,65 +347,53 @@ def cleanse_text(inc_text:str) -> str:
 #  @param    (run_stem)    - bool   - Do you want to Stemm the words?
 #  @returns  (str)         - str    - Modified content
 def data_cleansing(
-                   inc_text: str,
-                   run_pii: bool,
-                   run_cleanse: bool, 
-                   run_lemm: bool, 
-                   run_stop: bool,
-                   run_stem: bool,
-                   ) -> str:
+    inc_text: str,
+    run_pii: bool,
+    run_cleanse: bool, 
+    run_lemm: bool, 
+    run_stop: bool,
+    run_stem: bool,
+    stop_words=None,
+    lemmatizer=None,
+    stemmer=None
+) -> str:
 
     value = inc_text
     if run_pii:
-        # clean the text of PII first since Spacy NER requires complete sentences with lexical relevance
-        # removal of special characters can mangle attempts to clean the PII as well
         try:
-            # #debug.msg_debug("......clean_pii")
             value = clean_pii(value)
         except Exception as e:
-            # #debug.msg_warning("Unable to remove PII from the dataset.")
             process_exception(e)
             pass
             
     if run_cleanse:
         try:
-            # #debug.msg_debug("......clean_text")
             value = clean_string(value)
         except Exception as e:
-            # #debug.msg_warning("Unable to cleanse the string.")
             process_exception(e)
             pass
 
     if run_stop:
         try:
-            # #debug.msg_debug("......clean_stop_words")            
-            # note used SpaCy to clean up stop words and it was actually slower, using NLTK
-            value = clean_stop_words(value)
+            value = clean_stop_words(value, stop_words)
         except Exception as e:
-            # #debug.msg_warning("Unable to remove stop words from the string.")
             process_exception(e)
             pass
 
     if run_lemm:
         try:
-            # #debug.msg_debug("......clean_lemmatizer_words")            
-            # note used SpaCy to lemmatize and it was slower
-            value = clean_lemmatizer_words(value)
+            value = clean_lemmatizer_words(value, lemmatizer)
         except Exception as e:
-            # #debug.msg_warning("Unable to lemmatize the string.")
             process_exception(e)
             pass
 
     if run_stem:
         try:
-            # #debug.msg_debug("......clean_stem_words")            
-            value = clean_stem_words(value)
+            value = clean_stem_words(value, stemmer)
         except Exception as e:
-            # #debug.msg_warning("Unable to stem the string.")
             process_exception(e)
             pass
     
-    # check for NULLs again
     return value
 
 
@@ -445,11 +408,12 @@ def data_varacity_check(inc_dataframe: pd.DataFrame, source_column_name: str, mi
     :param minimum_letter_length: int - The minimum length of text required.
     :return: pd.DataFrame - The cleaned DataFrame.
     """
-    ##############################################
-    #- Rows that don't have sufficient length
-    ##############################################
+    # Check if the input DataFrame is empty
+    if inc_dataframe.empty:
+        return pd.DataFrame(columns=inc_dataframe.columns, dtype=object)
+
     # Convert all text to lower case first.
-    inc_dataframe[source_column_name] = inc_dataframe[source_column_name].str.lower()
+    inc_dataframe[source_column_name] = inc_dataframe[source_column_name].astype(str).str.lower()
     
     try:
         # Print the number of rows that will be removed due to insufficient length
@@ -507,13 +471,14 @@ def markdown_to_json(md: str):
     return json.loads(markdown_escaper(md))
 
 ##############################################
-#data_clean end
-##############################################
+# data_clean end
+# #############################################
+
 
 
 ##############################################
 # Utilty
-##############################################
+# #############################################
 
 # MOAM.py
 
@@ -531,7 +496,7 @@ def get_version(version_major, version_minor, version_release):
 ## Outputs library version history of effort.
 #
 #  @returns (None)                  - None
-def lib_diagnostics() -> None:
+def lib_diagnostics(packges) -> None:
         """
         Perform library diagnostics by checking the installed packages and their versions,
         as well as the availability of certain libraries like TensorFlow, Torch, and OpenAI.
@@ -549,7 +514,7 @@ def lib_diagnostics() -> None:
         package_version_length=20
 
         # Get installed packages
-        the_packages=["cupy", "jupyter-core", "langchain", "langchain-core", "nltk", "numba", "numpy", "pandas", "pydantic", "pyspellchecker", "spacy", "scipy", "scikit-learn", "seaborn", "usaddress", "xarray",]
+        the_packages=packges
         the_packages.sort()
         
         installed_dict = {pkg.key: pkg.version for pkg in pkg_resources.working_set}
@@ -558,6 +523,7 @@ def lib_diagnostics() -> None:
         
         #for package_idx, package_name in enumerate(installed):
         for idx, name in enumerate(installed):
+            #put an else and make them say not registered 
                  if name in the_packages:
                          installed_version = installed_dict[name]
                          print(f"{name:<40}#: {str(pkg_resources.parse_version(installed_version)):<20}")
@@ -586,7 +552,6 @@ def lib_diagnostics() -> None:
             print(f"{'OpenAI Azure Version':<40}#: {str(the_openai_version):<20}")
         except Exception as e:
             pass
-
         print(f"{BOLD_START}List Devices{BOLD_END} #########################################")
         try:
             from tensorflow.python.client import device_lib
@@ -626,17 +591,6 @@ def lib_diagnostics() -> None:
         #debug.msg_info(f"Exiting {__name__} {inspect.stack()[0][3]}") 
         return
 
-import netCDF4 as nc
-def lib_diagnostics():
-    debug.msg_debug("System version    #:{:>12}".format(sys.version))
-    netcdf4_version_info = nc.getlibversion().split(" ")
-    debug.msg_debug("netCDF4 version   #:{:>12}".format(netcdf4_version_info[0]))
-    debug.msg_debug("Matplotlib version#:{:>12}".format(matplt.__version__))
-    debug.msg_debug("Numpy version     #:{:>12}".format(np.__version__))
-    debug.msg_debug("Pandas version    #:{:>12}".format(pd.__version__))
-    debug.msg_debug("SciPy version     #:{:>12}".format(sp.__version__))
-
-    return
 
 def printversion():
 
@@ -662,44 +616,35 @@ def set_library_configuration() -> None:
 
 
 def split_text(text, chunk_size) -> list[str]:
+    """
+    Splits the given text into chunks of approximately the specified chunk size.
     
-  """
-  Splits the given text into chunks of approximately the specified chunk size.
-  
-  Args:
-  text (str): The text to split.
-  
-  chunk_size (int): The desired size of each chunk (in characters).
-  
-  Returns:
-  List[str]: A list of chunks, each of approximately the specified chunk size.
-  """
-  
-  chunks = []
-  current_chunk = StringIO()
-  current_size = 0
-  sentences = sent_tokenize(text)
-  for sentence in sentences:
-    sentence_size = len(sentence)
-    if sentence_size > chunk_size:
-      while sentence_size > chunk_size:
-        chunk = sentence[:chunk_size]
-        chunks.append(chunk)
-        sentence = sentence[chunk_size:]
-        sentence_size -= chunk_size
-        current_chunk = StringIO()
-        current_size = 0
-    if current_size + sentence_size < chunk_size:
-      current_chunk.write(sentence)
-      current_size += sentence_size
-    else:
-      chunks.append(current_chunk.getvalue())
-      current_chunk = StringIO()
-      current_chunk.write(sentence)
-      current_size = sentence_size
-  if current_chunk:
-     chunks.append(current_chunk.getvalue())
-  return chunks
+    Args:
+    text (str): The text to split.
+    
+    chunk_size (int): The desired size of each chunk (in characters).
+    
+    Returns:
+    List[str]: A list of chunks, each of approximately the specified chunk size.
+    """
+    chunks = []
+    current_chunk = []
+    current_size = 0
+
+    for word in text.split():
+        word_size = len(word)
+        if current_size + word_size + 1 > chunk_size:
+            chunks.append(' '.join(current_chunk))
+            current_chunk = [word]
+            current_size = word_size
+        else:
+            current_chunk.append(word)
+            current_size += word_size + 1
+
+    if current_chunk:
+        chunks.append(' '.join(current_chunk))
+
+    return chunks
 
 
 #  @param ([])      - list   - list of text chunked into a list
@@ -756,11 +701,11 @@ def summarize(chunks, inc_max_tokens, prompt, the_model, model_temperature, mode
 
 ##############################################
 # Utilty end
-##############################################
+# #############################################
 
 ##############################################
 # Security
-##############################################
+# #############################################
 
 prompt_defense_model_chunk_size=512  
 
@@ -786,8 +731,8 @@ def prompt_injection_split_string(your_string, n) -> list[str]:
 #  @param (Transformer Pipeline)    - pipeline - Mechanism via "transformer" library to read neural layer and execute evaluation on it.
 #  @param (Text to Analyze, String) - str      - Actual input to evaluate.
 #  @returns ({})                    - dict     - Results of neural processing, dictionary of true/false:% quality response
-def prompt_injection_predict(inc_pipe, inc_prompt: str) -> dict:
-    return {id2label[x['label']]: x['score'] for x in inc_pipe(inc_prompt)}
+def prompt_injection_predict(inc_pipe, inc_prompt):
+    return {id2label.get(x['label'], None): x['score'] for x in inc_pipe(inc_prompt)}
 
 
 
@@ -837,12 +782,13 @@ def detect_PromptInjection(inc_prompt:str, the_models: list) -> bool:
 
 ##############################################
 # Security end
-##############################################
+# #############################################
+
 
 
 ##############################################
 # Replace   
-##############################################
+# #############################################
 
 import fitz
 from pdfminer.psparser import PSLiteral, PSKeyword
@@ -864,11 +810,11 @@ def decode_value(value):
 
 ##############################################
 # Replace end
-##############################################
+# #############################################
 
 ##############################################
 # Promt_support
-##############################################
+# #############################################
 
 import google.generativeai as genai
 from google.cloud.aiplatform_v1beta1.types.openapi import Schema
@@ -1048,12 +994,13 @@ def genai_prompt(inc_system:str, inc_user:str, inc_format:str,environments:str )
 
 ##############################################
 # Promt_support end
-##############################################
+# #############################################
+
 
 
 ##############################################
 # plot
-##############################################
+# #############################################
 
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -1120,12 +1067,13 @@ def summarize_diagnostics_seaborn(history, title):
 
 ##############################################
 # plot end
-##############################################
+# #############################################
+
 
 
 ##############################################
 # nre
-##############################################
+# #############################################
 
 ## Looks for EMAIL object identified by spacy and abstracts the input to a constant "EMAILADDR"
 #  https://spacy.pythonhumanities.com/02_02_matcher.html#:~:text=How%20to%20use%20the%20spaCy%20Matcher%201%206.1.,...%205%206.5.%20Finding%20Quotes%20and%20Speakers%20
@@ -1134,201 +1082,96 @@ def summarize_diagnostics_seaborn(history, title):
 #  @param (Text to Analyze, String)         - String - Actual input to evaluate.
 #  @returns (String)                        - String - Transformed string abstracting email
 def replace_email_spacy(inc_model, inc_matcher, inc_text) -> str:
+    text_chunks = []
+    cleansed_text = inc_text
 
-    text_chunks=[]
-    cleansed_text=inc_text
     if len(inc_text) > inc_model.max_length:
-        chunks=int(round(len(inc_text)/inc_model.max_length))
-        start=0
-        end=inc_model.max_length
-        for idx, chunk in enumerate(chunks):
-            start=idx*inc_model.max_length
-            end=(idx+1) * inc_model.max_length
+        num_chunks = int(round(len(inc_text) / inc_model.max_length))
+        for idx in range(num_chunks):
+            start = idx * inc_model.max_length
+            end = (idx + 1) * inc_model.max_length
             text_chunks.append(inc_text[start:end])
     else:
         text_chunks.append(inc_text)
 
     try:
-        for idx, chunk in enumerate(text_chunks):
-            doc=inc_model(chunk)
-            matches = inc_matcher(doc)            
+        for chunk in text_chunks:
+            doc = inc_model(chunk)
+            matches = inc_matcher(doc)
             for match in matches:
-                cleansed_text = re.sub(f"{str(doc[match[0]:match[1]])}", f"EMAIL", cleansed_text)
+                cleansed_text = re.sub(f"{str(doc[match[0]:match[1]])}", "EMAIL", cleansed_text)
     except Exception as e:
         debug.msg_warning(f"clean_email_spacy threw an exception: {repr(e)}")
-        pass  #allow it to continue processing, we have other was of managing email
-    
-    return(cleansed_text)
+        pass  # allow it to continue processing, we have other ways of managing email
+
+    return cleansed_text
 
 
 def clean_named_entity_recognition(inc_model, inc_text) -> str:
+    nec_labels = ["PERSON"]
+    text_chunks = []
+    cleansed_text = inc_text
 
-    doc = inc_model(inc_text)
-    #nec_labels=["PERSON", "ORG", "DATE", "TIME"]
-    nec_labels=["PERSON"]
-
-    text_chunks=[]
-    cleansed_text=inc_text
     if len(inc_text) > inc_model.max_length:
-        chunks=int(round(len(inc_text)/inc_model.max_length))
-        start=0
-        end=inc_model.max_length
-        for idx, chunk in enumerate(chunks):
-            start=idx*inc_model.max_length
-            end=(idx+1) * inc_model.max_length
+        chunks = int(round(len(inc_text) / inc_model.max_length))
+        for idx in range(chunks):
+            start = idx * inc_model.max_length
+            end = (idx + 1) * inc_model.max_length
             text_chunks.append(inc_text[start:end])
     else:
         text_chunks.append(inc_text)
 
     try:
         for idx, chunk in enumerate(text_chunks):
-            doc=inc_model(chunk)    
-            for ent in doc.ents:
-                if ent.label_ in nec_labels:
-                    #msg_warning(f" Encountered NER {ent}")
-                    cleansed_text = re.sub(f"{ent}", f"{str(ent.label_)}", cleansed_text)
+            try:
+                doc = inc_model(chunk)
+                for ent in doc.ents:
+                    if ent.label_ in nec_labels:
+                        cleansed_text = re.sub(f"{ent}", f"{str(ent.label_)}", cleansed_text)
+            except Exception as e:
+                debug.msg_warning(f"clean_named_entity_recognition threw an exception while processing chunk: {repr(e)}")
+                continue  # Continue processing other chunks even if one fails
     except Exception as e:
         debug.msg_warning(f"clean_named_entity_recognition threw an exception: {repr(e)}")
-        pass  #continue processing regardless, we'll accept loss of some Person identification to keep the code processing
-        
-    return(cleansed_text)
+        pass  # Continue processing regardless, we'll accept loss of some Person identification to keep the code processing
 
+    return cleansed_text
 
-nlp = spacy.load("en_core_web_trf")
-import en_core_web_trf
-def clean_named_entity_recognition(inc_text: str) -> str:
-
-    debug.msg_info(f"Entering {__name__} {inspect.stack()[0][3]}")
-
-    nlp = en_core_web_trf.load()
-    doc = nlp(inc_text)
-    nec_labels=["PERSON", "ORG", "DATE", "TIME"]
-
-    cleansed_text = inc_text
-    for ent in doc.ents:
-        if ent.label in nec_labels:
-            cleansed_text = re.sub(f"{ent}", f" {str(ent.label)} ", cleansed_text)
-
-    debug.msg_info(f"Exiting {__name__} {inspect.stack()[0][3]}")
-    
-    return(cleansed_text)
-
-
-def detect_address(inc_text: str, inc_model) -> str:
-    address=""
-    zipcode=""
-    city=""
-    state=""
-    resultant=""
-    #add_reg=address_pattern.search(inc_text)
-    zip_reg=zip_code.search(inc_text)
-    #if add_reg:
-    #    address = add_reg.group()
-    if zip_reg:
-        zipcode = zip_reg.group()
-        
-    doc=inc_model(inc_text)
-    for token in doc.ents:
-        if token.label_ == "GPE":  # Geopolitical Entity (City)
-            city = token.text
-        elif token.label_ == "LOC":  # Location (State/Province)
-            state = token.text
-        elif token.label_ == "DATE":  # Postal Code
-            if zipcode == "":
-                zipcode = token.text
-
-    try:
-        usaddress_values=usaddress.tag(inc_text, tag_mapping={
-           'PlaceName': 'city',
-           'StateName': 'state',
-        })
-    except Exception as e:
-        debug.msg_warning(f"ADDRESS processing encountered a problem: {str(e)}")
-        pass
-        #CGW, FIX, TODO, if you have too many identified components the API gets wonky.
-        #Need to reduce tokens
-
-    try:
-        if city == "":
-           city=usaddress_values[0]['city']
-    except Exception as e:
-        pass
-    try:
-        if state == "":
-            state=usaddress_values[0]['state']
-    except Exception as e:
-        pass
-    try:
-        if zipcode == "":
-            zipcode=usaddress_values[0]['zip_code']
-    except Exception as e:
-        pass
-
-    resultant=", ".join([str(city),str(state),str(zipcode)])
-    if len(resultant) > 3:
-        return resultant
-    else:
-        return ""
-    
 import re
 import usaddress
 
 
 # Define the zip code regular expression
+
 zip_code = re.compile(r'\b\d{5}(?:-\d{4})?\b')
 
-def detect_address(inc_text: str, inc_model) -> str:
-    address = ""
-    zipcode = ""
-    city = ""
-    state = ""
-    resultant = ""
-
-    # Extract zip code using regex
-    zip_reg = zip_code.search(inc_text)
-    if zip_reg:
-        zipcode = zip_reg.group()
-
-    # Process the text with the NER model
-    doc = inc_model(inc_text)
-    for token in doc.ents:
-        if token.label_ == "GPE":  # Geopolitical Entity (City)
-            city = token.text
-        elif token.label_ == "LOC":  # Location (State/Province)
-            state = token.text
-        elif token.label_ == "DATE":  # Postal Code
-            if zipcode == "":
-                zipcode = token.text
-
+def detect_address(inc_text, inc_model):
     try:
-        usaddress_values = usaddress.tag(inc_text, tag_mapping={
-            'PlaceName': 'city',
-            'StateName': 'state',
-        })
+        # Extract entities using the model
+        doc = inc_model(inc_text)
+        city = state = zip_code_str = ""
+        
+        for ent in doc.ents:
+            if ent.label_ == 'GPE':
+                city = ent.text
+            elif ent.label_ == 'LOC':
+                state = ent.text
+        
+        # Search for zip code using regex
+        zip_code_match = zip_code.search(inc_text)
+        if zip_code_match:
+            zip_code_str = zip_code_match.group()
+        
+        # Use usaddress to tag the address components
+        tagged_address, address_type = usaddress.tag(inc_text, tag_mapping={'PlaceName': 'city', 'StateName': 'state'})
+        city = tagged_address.get('PlaceName', city)
+        state = tagged_address.get('StateName', state)
+        
+        return f"{city}, {state}, {zip_code_str}"
+    
     except Exception as e:
-        debug.warning(f"ADDRESS processing encountered a problem: {str(e)}")
-        usaddress_values = [{}]
-    try:
-        if city == "":
-            city = usaddress_values[0].get('city', "")
-    except Exception as e:
-        pass
-    try:
-        if state == "":
-            state = usaddress_values[0].get('state', "")
-    except Exception as e:
-        pass
-    try:
-        if zipcode == "":
-            zipcode = usaddress_values[0].get('ZipCode', "")
-    except Exception as e:
-        pass
-
-    resultant = ", ".join([str(city), str(state), str(zipcode)])
-    if len(resultant) > 3:
-        return resultant
-    else:
-        return ""
+        debug.msg_warning(f"ADDRESS processing encountered a problem: {e}")
+        return f"{city}, {state}, {zip_code_str}"
     
 
 def detect_locations(inc_prompt:str, inc_model) -> list[str]:
@@ -1374,12 +1217,13 @@ def detect_organizations(inc_prompt:str, inc_model) -> list[str]:
 
 ##############################################
 # nre end
-##############################################
+# #############################################
+
 
 
 ##############################################
 # pii
-##############################################
+# #############################################
 
 
 def clean_pii(inc_input:str) -> str:
@@ -1392,7 +1236,7 @@ def clean_pii(inc_input:str) -> str:
     cleansed_text=re.sub(credit_card, "CREDITCARD", cleansed_text)
     cleansed_text=re.sub(link, "URL", cleansed_text)
     cleansed_text=re.sub(ip, "IP", cleansed_text)
-    cleansed_text=re.sub(ipv6, "IPV6", cleansed_text)
+    cleansed_text=re.sub(ipv6, " IPV6", cleansed_text)
     cleansed_text=re.sub(phone, "PHONENUMBER", cleansed_text)
     cleansed_text=re.sub(street_address, "STREETADDRESS", cleansed_text)
     cleansed_text=re.sub(btc_address, "BTCADDRESS", cleansed_text)
@@ -1407,94 +1251,90 @@ def clean_pii(inc_input:str) -> str:
 
 ##############################################
 # pii end
-##############################################
+# #############################################
 
 ##############################################
 # decode_pdf
-##############################################
+# #############################################
 
-def read_pd_pdf(inc_filename:str) -> str:
-
+def read_pd_pdf(inc_filename: str) -> str:
     debug.msg_info(f"Entering {__name__} {inspect.stack()[0][3]}")     
     try:
-        if not ( os.path.isfile(inc_filename) ):
-            print(f"ERROR detected, the input data file for work further in the notebook is missing.  Aborting execution.")
+        if not os.path.isfile(inc_filename):
+            print(f"ERROR detected, the input data file for work further in the notebook is missing. Aborting execution.")
             print(f"  Resolve the {inc_filename} missing file and repeat.")
             raise SystemExit("Unable to continue without data.")
+        
+        doc = fitz.open(inc_filename)
+        output = []
+        total_text = ""
+        
+        for page in doc:
+            output += page.get_text("blocks")
+            total_text = ""
+        
+            for block in output:
+                if block[6] == 0:  # We only take the text
+                    plain_text = str(unidecode(block[4]))
+                    # handle hyphenations and slashes
+                    plain_text = " ".join(plain_text.split("/"))
+                    plain_text = " ".join(plain_text.split("-"))
+                    total_text = " ".join([total_text, plain_text])
+        
+        debug.msg_info(f"Exiting {__name__} {inspect.stack()[0][3]}") 
+        return total_text
+
     except Exception as e:
         process_exception(f"ERROR detected trying detect the PDF path as follows: {str(e)}")
-
-    doc = fitz.open(inc_filename)
-    output = []
-    total_text=""
-          
-    for page in doc:
-        output += page.get_text("blocks")
-        total_text=""
-    
-        for block in output:
-             if block[6] == 0: # We only take the text
-                  plain_text = str(unidecode(block[4]))
-                  #handle hyphenations and slashes
-                  plain_text = " ".join( plain_text.split("/") )
-                  plain_text = " ".join( plain_text.split("-") )
-                  #plain_text = clean_string(plain_text)
-                  #total_text=total_text+ " " + cleanResume(plain_text)
-                  total_text=" ".join([total_text, plain_text])
-
-    debug.msg_info(f"Exiting {__name__} {inspect.stack()[0][3]}") 
-    return total_text
+        return ""
 
 
-def read_pdf(inc_filename:str) -> str:
-
-    debug.msg_info(f"Entering {__name__} {inspect.stack()[0][3]}")  
-
+def read_pdf(inc_filename: str) -> str:
+    debug.msg_info(f"Entering {__name__} {inspect.stack()[0][3]}")
     try:
-        if not ( os.path.isfile(inc_filename) ):
-            debug.msg_error(f"ERROR detected, the input data file for work further in the notebook is missing.  Aborting execution.")
+        if not os.path.isfile(inc_filename):
+            debug.msg_error("ERROR detected, the input data file for work further in the notebook is missing.  Aborting execution.")
             debug.msg_error(f"  Resolve the {inc_filename} missing file and repeat.")
             raise SystemExit("Unable to continue without data.")
+        
+        doc = fitz.open(inc_filename)
+        output = []
+        total_text = ""
+        
+        for page in doc:
+            output += page.get_text("blocks")
+            total_text = ""
+        
+            for block in output:
+                if block[6] == 0:  # We only take the text
+                    plain_text = str(unidecode(block[4]))
+                    # handle hyphenations and slashes
+                    plain_text = " ".join(plain_text.split("/"))
+                    plain_text = " ".join(plain_text.split("-"))
+                    total_text = " ".join([total_text, plain_text])
+        
+        debug.msg_info(f"Exiting {__name__} {inspect.stack()[0][3]}")
+        return total_text
+
     except Exception as e:
         process_exception(f"ERROR detected trying detect the PDF path as follows: {str(e)}")
+        return ""
 
-    doc = fitz.open(inc_filename)
-    output = []
-    total_text=""
-          
-    for page in doc:
-        output += page.get_text("blocks")
-        
-        previous_block_id = 0 # Set a variable to mark the block id
-        total_text=""
-    
-        for block in output:
-             if block[6] == 0: # We only take the text
-                  #if previous_block_id != block[5]: # Compare the block number 
-                  #    print("\n")
-                  plain_text = str(unidecode(block[4]))
-                  #handle hyphenations and slashes
-                  plain_text = " ".join( plain_text.split("/") )
-                  plain_text = " ".join( plain_text.split("-") )
-                  #plain_text = clean_string(plain_text)
-                  #total_text=total_text+ " " + cleanResume(plain_text)
-                  total_text=" ".join([total_text, plain_text])
-
-    debug.msg_info(f"Exiting {__name__} {inspect.stack()[0][3]}")  
-    return total_text
 
 ##############################################
 # decode_pdf end
-##############################################
+# #############################################
+
 
 
 ##############################################
 # metrics
-##############################################
+# #############################################
 
 def calculate_string_size(inc_string:str) -> int:
     response=int(len(word_tokenize(inc_string)))
     return response
+
 
 def get_metrics(inc_df: pd.DataFrame, source_columns: list) -> None:
     for idx, name in enumerate(source_columns):
@@ -1508,6 +1348,11 @@ def get_metrics(inc_df: pd.DataFrame, source_columns: list) -> None:
         arr = np.array(mylist)
         debug.msg_debug(f"Metrics on tokens for {name}.\n")
         debug.msg_debug(f"..records: {len(arr):>30,}")
+        
+        if arr.size == 0:
+            debug.msg_debug("Array is empty, cannot compute max, avg, or min values.")
+            continue
+        
         debug.msg_debug(f"......max: {np.max(arr):>30,}")
         debug.msg_debug(f"......avg: {int(np.average(arr)):>30,}")
         debug.msg_debug(f"......min: {np.min(arr):>30,}")
@@ -1515,4 +1360,4 @@ def get_metrics(inc_df: pd.DataFrame, source_columns: list) -> None:
 
 ##############################################
 # metrics end
-##############################################
+# #############################################
