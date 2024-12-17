@@ -112,6 +112,12 @@ app.post('/upload2', upload.single('video'), async (req, res) => {
   }
 });
 
+
+app.get('/api/pirates', (req, res) => {
+  const pirate =  { id: 1, name: 'Blackbeard' };
+  res.send({ data: pirate });
+});
+
 app.get('/', (req, res) => {
   res.sendFile('index.html');
 });
