@@ -114,7 +114,7 @@ app.post('/upload2', upload.single('video'), async (req, res) => {
 
 
 app.get('/api/pirates', (req, res) => {
-  const pirate =  { id: 1, name: 'Blackbeard' };
+  const pirate =  { id: 1, name: 'Blackbeard', k1: process.env.SUBSCRIPTION_KEY, sr1:  process.env.SERVICE_REGION };
   res.send({ data: pirate });
 });
 
