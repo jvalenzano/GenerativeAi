@@ -66,9 +66,9 @@ Various versioning is present in this repository as each task is independent of 
 
 Given a version number MAJOR.MINOR.PATCH, increment the:
 
-+ *MAJOR* version when you make incompatible API changes
-+ *MINOR* version when you add functionality in a backward compatible manner
-+ *PATCH* version when you make backward compatible bug fixes
++ **MAJOR** version when you make incompatible API changes
++ **MINOR** version when you add functionality in a backward compatible manner
++ **PATCH** version when you make backward compatible bug fixes
 
 Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH or MAJOR-MINOR-PATCH, in support of directory structures, format.
 
@@ -77,7 +77,7 @@ Additional labels for pre-release and build metadata are available as extensions
 ### Critical Project Data
 
 + All Authoritative data is kept in:
-  + gs://usfs-gcp-rand-test3-data-usc1
+  + ```gs://usfs-gcp-rand-test3-data-usc1```
 + Authoritative folders have the following structure:
   + ```public_source``` - immutable data used for experiments and labs.
   + ```source_data``` - Input used for actual Use Case development, versioning applies to code.
@@ -124,12 +124,6 @@ The benefits of enforcing this are as follows:
 + For public facing repositories it presents a clean and consistent public face for our codebase, showing us in the best possible light.
 + Each developer can use their own fork to do whatever work they need to, and the onus is on them to keep their own repositories tidy.
 
-+ ***The Upstream Repository will only have two branches, develop, containing the latest working code, and main containing the current release.***
-
-***The default branch will be develop***
-
-***The develop and master branches are locked down such that the only way code can be contributed to them is via a peer-reviewed pull-request.***
-
 Over and above the default labels provided by GitHub add documentation and feature labels.
 
 Assign teams admins with admin rights, and developers with write access to the repo.
@@ -150,6 +144,8 @@ Features must be named per the following pattern #{issue number}/{some_descripti
 When committing something use the -m flag to add a short commit message of the format:
 
 ```#<Issue_Id by Ticketing System><Optional:(Use Case Id)><Bug Fix|Feature|Documentation|Optimization><Short description of the change in past tense>.```
+
+*the pound system is required*
 
 Commit messages ought to be in the past tense.
 
@@ -191,36 +187,39 @@ For code that requires external dependencies such as Mongo, Redis, Postgres, etc
 
 Utilize the following tenants when maturing your data source:
 
-+ Authoritative
++  **Authoritative**
+
  + There's only one place to get it.
  + That data represents the place to get the data and the only place.
 
-+ Versioned
++  **Versioned**
+
  + Meaning it's known, embedded with the output.
  + It's correlated with the code used to create it.
 
-+ Easily read
++  **Easily read**
+
  + In AI/ML, single dimensional arrays dominate all.
  + Binary output is secondary best.
  + Easily understood and reentrant is likely your best bet.
  + If possible take a well-known data structure and pickle it.  Easily read, easily understood and quickly reentrant.  Pandas -> Pickle.
 
-+ Easily accessed
++  **Easily accessed**
  + You don't have to "hunt" for it.
  + Access control is applied.
  + Easily searched for in a central portal with descriptions of meta-data, links for download and previews of the content.
 
-+ Cleansed
++  **Cleansed**
  + Prompt Injection checked (NLP methods, existing AI neural layers).
  + PII cleansed (Named Entity Recognition [NER] methods), DLP, and regular expressions.
  + CUI cleansed
  + Original data maintained and immutable.
  + Cleaned data (at whatever level) documented and saved as an additional set of data
 
-+ Peer Reviewed
++  **Peer Reviewed**
  + Data Scientist reviewed in terms of cleansing and preparatory work.
 
-+ Documented
++  **Documented**
  + See all the aforementioned information and co-locate that data in one place that's consistently formatted and easily read/discoverable (ERDDAP?)
 
 <a name="folder_structure"/>
