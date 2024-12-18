@@ -22,6 +22,8 @@ Repository for all Artificial Intelligence (AI) projects within Foundational Dig
 
 [Folder Structure](#folder_structure)
 
+[USDA NRE Compliance](#usda_new_compliance)
+
 [References](#references)
 
 <a name="branches"/>
@@ -268,12 +270,51 @@ File/Folder Explanations:
 +  ML-Support/debug.py - Standard logging library.
 
 
+<a name="references"/>
+
+## USDA NRE Compliance
+
++ **Governance and Business Case**:
+  +  Use Case management occurs within the AI Council.
+  +  Business Owner engagement is required for active Use Cases.
+  +  Registration with the USDA AI Inventory is required.
+
++ **Security**:
+  +  Development environment needs to be in an ATO approved location with cognizance of the system owner.  
+  +  Changes to the development environment must be approved via ticket to the system owner. 
+  +  *** Discuss DLP***
+
++ **Product Owner (business responsibility)**:
+  +  Business Owner engagement form recognized the end-user/customer. 
+  +  The AI PM will act as a Product Owner for end-user/customers.
+  +  Agile Scrum methodology will be used for prioritization and task management conducted by the USDA NRE AI Project Management.
+
++ **Technical Owner (CIO)**:
+  +  The Technical Owner of an AI engagement is recognized as the USDA NRE AI Technical Lead.
+
++ **Authoritative**: 
+  +  Analysis by the AI Council will help determine the priority, impact, and the potential for overlapping business functions.
+  + The Architecture Review Board (ARB) will determine final disposition of an AI project targeted for operational deployme nt.
+
++ **Hosting**:
+  +  AI solutions will be hosted in Azure or GCP with system owner cognizance and coordination.
+
++ **Environment**:
+  +  Any solution targeted for operational release will have their own repositories and pick up with the standard CTO engagement process once approved by the AI Council.
+
 
 <a name="references"/>
 
 ## Reference
 
 + [USDA NRE Application Standards] (https://fsweb.wo.fs.fed.us/ad/)
-+ [USDA NRE Application Standards (within repository)] (README_USDANRE_APPSTD.md)
-+ [Nate populate this] (https://www.google.com)
-
++ [21st Century IDEA ACT](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
++ [Section 508](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
++ [M-13-13 Open Data Policy](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
++ [M-15-14 Management and Oversight of Federal Information Technology](https://policy.cio.gov/fitara/)
++ [Federal Information Technology Acquisition Reform Act (FITARA)](https://www.congress.gov/113/plaws/publ291/PLAW-113publ291.pdf#page=148)
++ [M-16-21 Federal Source Code Policy] (https://policy.cio.gov/source-code/)
++ [Data Center Optimization Initiative](https://policy.cio.gov/dcoi/)
++ [Guidelines for PIV-enablement](http://www.cac.mil/Portals/53/Documents/m-11-11.pdf?ver=2017-04-17-081020-897
++ [HTTPS-only Standard](https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/memoranda/2015/m-15-13.pdf)
++ [NIST FIPS-199](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf)

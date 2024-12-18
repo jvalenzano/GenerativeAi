@@ -89,3 +89,15 @@ M-15-13 - The HTTPS-only Standard
 This Memorandum requires that all publicly accessible Federal websites and web services only provide service through a secure connection. The strongest privacy and integrity protection currently available for public web connections is Hypertext Transfer Protocol Secure (HTTPS).
 NIST FIPS-199 - Standards for Security Categorization of Federal Information and Information Systems
 Each application must be categorized with a rating of low, moderate, or high impact in each category of confidentiality, integrity, and availability. All PII data is encrypted and stored as per NIST FIPS-200 and NIST 800-53 guidelines with strong authentication.
+
+## References:
++ [21st Century IDEA ACT](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
++ [Section 508](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
++ [M-13-13 Open Data Policy](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
++ [M-15-14 Management and Oversight of Federal Information Technology](https://policy.cio.gov/fitara/)
++ [Federal Information Technology Acquisition Reform Act (FITARA)](https://www.congress.gov/113/plaws/publ291/PLAW-113publ291.pdf#page=148)
++ [M-16-21 Federal Source Code Policy] (https://policy.cio.gov/source-code/)
++ [Data Center Optimization Initiative](https://policy.cio.gov/dcoi/)
++ [Guidelines for PIV-enablement](http://www.cac.mil/Portals/53/Documents/m-11-11.pdf?ver=2017-04-17-081020-897
++ [HTTPS-only Standard](https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/memoranda/2015/m-15-13.pdf)
++ [NIST FIPS-199](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf)
