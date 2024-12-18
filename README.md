@@ -24,8 +24,6 @@ Repository for all Artificial Intelligence (AI) projects within Foundational Dig
 
 [References](#references)
 
-
-
 <a name="branches"/>
 
 ## Branches
@@ -275,4 +273,7 @@ File/Folder Explanations:
 
 ## Reference
 
++ [USDA NRE Application Standards] (https://fsweb.wo.fs.fed.us/ad/)
++ [USDA NRE Application Standards (within repository)] (README_USDANRE_APPSTD.md)
 + [Nate populate this] (https://www.google.com)
+
