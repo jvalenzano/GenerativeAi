@@ -41,13 +41,15 @@ Main branch is the primary branch for this project.  Note that in the future a d
 
 ##### Library Requirements
 
+```
 + pip install nvidia-cudnn-cu12==8.9.7.29
 + pip install tensorflow==2.17
 + pip install tensorrt
 + pip install spacy[cuda12x]
 + pip install torch torchvision torchaudio pycuda
+```
 
-***Expect to see a v2.4 for Torch.***
+**Expect to see a v2.4 for Torch.**
 
 #### Microsoft Azure
 
@@ -71,6 +73,7 @@ Given a version number MAJOR.MINOR.PATCH, increment the:
 Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
 
 <a name="proj_data"/>
+
 ### Critical Project Data
 
 + All Authoritative data is kept in:
@@ -150,9 +153,9 @@ In general try to group file changes wherever appropriate, so if your controller
 
 If your change does not fit any of these categories, use Feature. Likewise if your change is not tied to an issue number you may use n/a instead.
 
-So to use the above example your commit would have the following message:
+So to use the *above example your commit would have the following message*:
 
-***#<Issue Id> Feature added cosine similarity to human selected comments versus generative selected comments.***
+```#<Issue Id> Feature added cosine similarity to human selected comments versus generative selected comments.```
 
 <a name="deployment"/>
 
