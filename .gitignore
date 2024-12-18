@@ -5,7 +5,7 @@
 temp/
 
 # ignore all DotENV files which contain secrets
-.env
+.env_api_keys
 
 # ignore all jupyter notebook output
 .ipynb_checkpoints/
