@@ -315,6 +315,6 @@ File/Folder Explanations:
 + [Federal Information Technology Acquisition Reform Act (FITARA)](https://www.congress.gov/113/plaws/publ291/PLAW-113publ291.pdf#page=148)
 + [M-16-21 Federal Source Code Policy](https://policy.cio.gov/source-code/)
 + [Data Center Optimization Initiative](https://policy.cio.gov/dcoi/)
-+ [Guidelines for PIV-enablement](http://www.cac.mil/Portals/53/Documents/m-11-11.pdf?ver=2017-04-17-081020-897
++ [Guidelines for PIV enablement](http://www.cac.mil/Portals/53/Documents/m-11-11.pdf?ver=2017-04-17-081020-897)
 + [HTTPS-only Standard](https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/memoranda/2015/m-15-13.pdf)
 + [NIST FIPS-199](http://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.199.pdf)
