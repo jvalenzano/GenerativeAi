@@ -1,15 +1,21 @@
 # GenerativeAi
 
+## Description
+
 Repository for all Artificial Intelligence (AI) projects within Foundational Digital Solutions (FDS) in support of the USDA/NRE as a whole.
 
 Project setup includes potential for Code Spaces with a .devcontainer and is structured by `ML\*-<issue Id>_<common name>` which represents explicit data science workloads. 
 
+## Branches
+Main branch is the primary branch for this project.  Note that in the future a develop branch will be created for developer submissions with integration into main by a senior developer.
 
-## System Requirements
+## Prerequisites / Knowledge
 
-### Google Cloude Provider (GCP)
+### System Requirements
 
-### Library Requirements
+#### Google Cloude Provider (GCP)
+
+##### Library Requirements
 
 + pip install nvidia-cudnn-cu12==8.9.7.29
 + pip install tensorflow==2.17
@@ -19,109 +25,200 @@ Project setup includes potential for Code Spaces with a .devcontainer and is str
 
 ***Expect to see a v2.4 for Torch.***
 
-## Documentation folder structure
+#### Microsoft Azure
+
+
+## Useage instructions
+
+
+### Versioning
+
+Various versioning is present in this repository as each task is independent of others.  Typical versioning follows [Sementic Versioning 2.0.0] (https://semver.org/).
+
+Given a version number MAJOR.MINOR.PATCH, increment the:
+
++ MAJOR version when you make incompatible API changes
++ MINOR version when you add functionality in a backward compatible manner
++ PATCH version when you make backward compatible bug fixes
+
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+
+### Critical Project Data
+
++ All Authoritative data is kept in:
+  + gs://usfs-gcp-rand-test3-data-usc1
++ Authoritative folders have the following structure:
+  + public_source - immutable data used for experiments and labs.
+  + source_data   - Input used for actual Use Case development, versioning applies to code.
+  + working_data  - Output generated from code, versioning applies to code. 
+
+
+### Coding Standards
+
+#### Development instructions
+
++ How to build,
++ How to test
++ Any specific environment variables needed
+
+#### Branch instructions
+
++ Create branches via the GitHub Issue the work is related to and then delete them when the ticket is closed.
+  + Do not allow too many branches, making it impossible for a new developer to know where to start
++ Create annotated tags when a version of your code is released.
++ Use formatting tools and lint your code for that issue on the files you worked on (not the entire code base, we don't want to trigger mass change).
++ DO NOT include data or binary files (unless a code artifact) to the repository.
++ Add testing when/where appropriate (Jupyter Notebooks are not necessarily applicable here).
++ Each tag inspect the README.dm to ensure we're not out of date or simply innacurate README exists
+
+Coding standards are, by their very nature, opinionated, and the following represents my own opinion, based on decades of professional software development, of what our common coding standards ought to be. These standards are mostly independent of programming language (I've included some language specific recommendations as well however) and present a 'best-practice' approach to developing high quality software.
+
+#### Repository Structure
+For any codebase there will be a repository, known as the 'upstream' repository.
+
+The benefits of enforcing this are as follows:
+
++ When a new developer joins the project it's easy for them to see immediately which branch contains the latest work in progress and which branch contains the latest release code.
++ For public facing repositories it presents a clean and consistent public face for our codebase, showing us in the best possible light.
++ Each developer can use their own fork to do whatever work they need to, and the onus is on them to keep their own repositories tidy.
+
++ ***The Upstream Repository will only have two branches, develop, containing the latest working code, and main containing the current release.***
+
+***The default branch will be develop***
+
+***The develop and master branches are locked down such that the only way code can be contributed to them is via a peer-reviewed pull-request.***
+
+Over and above the default labels provided by GitHub add documentation and feature labels.
+
+Assign teams admins with admin rights, and developers with write access to the repo.
+
+#### Workflow
+
++ Developers should not, as a general rule be working in other developer's branches, but if it's really needed they can by setting up another git remote
++ Ensure work conforms to common linting standards (For Javascript projects I use eslint and prettier for this, but tools vary from language to language)
++ Ensure work is consistent with current documentation
++ Assign reviewers, appropriate labels, and assign the PR to yourself
++ Using GitHub to create a Pull Request against the upstream develop branch (see below for ticket naming scheme)
++ Respond to any review comments / make changes as appropriate.
++ When all changes / ticket is approved, merge the PR and delete the branch
+
+Features must be named per the following pattern #{issue number}/{some_descriptive-text} — so for example, if you are working on issue ABC-1 with the title "do the thing", call your feature ABC-1/do_the-thing. Obviously use your common sense to avoid making the feature names too long.
+
+#### Commit Messages
+When committing something use the -m flag to add a short commit message of the format {issue number} summary of what you changed. So for example if you are working on issue ABC-1 and you added a method to the aardvark_controller you might use the following commit message "ABC-1 added anteater method to aardvark controller".
+
+Commit messages ought to be in the past tense.
+
+In general try to group file changes wherever appropriate, so if your controller change also involved updating something in a helper file, the one commit message can happily encompas the changes to both files. The message ought to reflect the main aim of the change.
+
++ Bug Fix - the change fixes a bug
++ Feature - the change adds a new feature (the usual issue type)
++ Documentation — The change is a documentation only change
++ Optimisation - The change is an optimisation of the code base without any functional changes
+
+If your change does not fit any of these categories, use Feature. Likewise if your change is not tied to an issue number you may use n/a instead.
+
+So to use the above example your commit would have the following message:
+
+***#<Issue Id> Feature added cosine similarity to human selected comments versus generative selected comments.***
+
+#### Deployment instructions
+
+Linting
+For Javascript projects I use eslint and prettier to enforce a common coding style, configured via the following base .eslint.json file. This can be enhanced with React specific plugins as required, but overall stick to the defaults but with enforced single quotes and no trailing semi-colons.
+
+{
+  "extends": [
+    "standard",
+    "prettier",
+    "prettier/standard"
+  ],
+  "plugins": [
+    "prettier",
+    "standard",
+    "mocha"
+  ],
+  "parserOptions": {
+    "sourceType": "module"
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "rules": {
+    "prettier/prettier": ["error", { "singleQuote": true, "semi": false }]
+  }
+}
+
+For solidity projects I use solhint with the following configuration
+
+{
+  "extends": "default",
+  "rules": {
+    "compiler-fixed": false,
+    "indent": ["error", 4],
+    "quotes": ["error", "single"],
+    "max-line-length": ["error", 120]
+  }
+}
+
+#### Use Docker for external dependencies
+
+For code that requires external dependencies such as Mongo, Redis, Postgres, etc, ensure there is a docker-compose.yml file configured to run those dependencies. Do not assume that a developer has Mongo etc already installed. If the developer is a contractor with multiple clients it's often difficult or impossible for them to run such things on their bare metal.
+
+#### Development Environment
+
+***???***
+
+#### Development Process
+All development is to follow the standard git-flow process, modified to allow for code-reviews.
+
+See this handy, if ugly, cheat sheet.
+
+Setup
+Fork this repo into your personal GitHub account
+clone your fork to your local development machine
+Set this repo as the upstream repo git remote add upstream <insert the upstream url>
+Disallow direct pushing to upstream git remote set-url --push upstream no_push
+create a local master branch git checkout -b master and test it via git pull upstream master
+ensure you have installed the git-flow command line helpers and git-flow-completion utils then run git flow init -d.
+Optional Git Setup
+Set up git to always rebase rather than merge.
+
+git config --global branch.autosetuprebase always
+Make sure git knows you are using your correct email.
+
+git config user.email "username@domain.suffix"
+
+## Folder structure
 
 Documentation folder has 3 level tree-like structure, inspired by ZenDesk documentation structure:
 
 ```
-category/
-├── meta.json
-├── section/
-│   ├── meta.json
-│   ├── article/
-│   │   ├── content.md
-│   │   ├── meta.json
-│   │   ├── image.png
-│   │   ├── image.jpg
-│   │   ├── image.jpeg
-│   │   └── document.pdf
+./
+├── .devcontainer/ (potential for CodeSpaces)
+│   ├── Dockerfile
+│   ├── devcontainer.json
+├── .gitignore
+├── README.md
+├── ML-Support/
+│   ├── cfg (sample *nix configuration file)
+│   ├── environment (environment files for Anaconda setups)
+│   ├── script (scripts to run them all for Git repos, templates)
+│   ├── README.md
+│   ├── *.py
+│   ├── *.rc (screen configuration file examples)
+│   ├── debug.py (standard logging library)
+│   ├── MOAM.py
+│   ├── test_MOAM.py
+│   ├── test_MOAM_documentation.md
 │   └── another_article/
-│       ├── content.md
-│       ├── meta.json
-│       ├── image.png
-│       ├── image.jpg
-│       ├── image.jpeg
-│       └── document.pdf
-└── another_section/
-    ├── meta.json
-    ├── article/
-    │   ├── content.md
-    │   ├── meta.json
-    │   ├── image.png
-    │   ├── image.jpg
-    │   ├── image.jpeg
-    │   └── document.pdf
-    └── another_article/
-        ├── content.md
-        ├── meta.json
-        ├── image.png
-        ├── image.jpg
-        ├── image.jpeg
-        └── document.pdf
+└── ML-<Issue Id, 3 digits>_<Short Name>/
+    └── *
+├── shared/
+│   ├── Various scripts like gcs fuse mounting.
 ```
+## Reference
 
-## Tree levels
-
-### Root (Category) level
-
-Root level of your documentation folder represents ZenDesk category. It may contain following items:
-- Category metadata written in file named `meta.json`. This file contains category title, description, etc. You can find more details [here](metadata.md)
-- Section folders. Each folder represents a section under the category.
-All folders in category folder are being recognized as sections. All files expect `meta.json` will be ignored for category.
-Metadata file `meta.json` required to be in the folder. If it's missing, upload will fail with error.
-It is OK to not have any sections under category. In this case only category itself will be created/updated.
-
-Example of valid category level:
-
-```
-project_root/
-├── meta.json
-├── section/
-├── another_section/
-└── cool_section/
-```
-
-### Category level
-
-Second folder level represents category level of your documentation. It may contain following items:
-
-- Section metadata written in file named `meta.json`. This file contains section title, description, etc. You can find more detail [here](metadata.md)
-- Article folders. Each folder represents an article under section.
-
-All folders in section folder are being recognized as articles. All files expect `meta.json` will be ignored for section.
-Metadata file `meta.json` required to be in the folder. If it's missing, upload will fail with error.
-It is OK to not have any articles under section. In this case only section itself will be created/updated.
-
-Example of valid section level:
-
-```
-section/
-├── meta.json
-├── article/
-├── cool_article/
-└── another_cool_article/
-```
-
-### Article level
-
-Third folder level represents article level of your documentation folder. It may contain following items:
-
-- Article metadata written in file named `meta.json`. This file contains section title, description, etc. You can find more detail [here](metadata.md)
-- Article contents written in `%filename%.md`. Please note, that name of this file may have any name, only extension `.md` is required.
-- Static files in following formats: `.jpg`, `.jpeg`, `.png`, `.gif`, `.svg`, `.pdf`.
-
-All folders in article folder will be ignored. All files except `meta.json`, article content and supported static files will be ignored for article.
-Metadata file `meta.json` required to be in the folder. If it's missing, upload will fail with error.
-One and only one `.md` file must exist in article folder. If there will be no markdown content, or content will be ambiguous (i.e. more then one `.md` file),
-upload will fail with error.
-
-Example of valid article level:
-
-```
-article/
-├── meta.json
-├── content.md
-├── photo.jpg
-├── picture.png
-└── document.pdf
-```
++ [Nate populate this] (https://www.google.com)
