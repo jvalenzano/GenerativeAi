@@ -4,11 +4,26 @@
 
 Repository for all Artificial Intelligence (AI) projects within Foundational Digital Solutions (FDS) in support of the USDA/NRE as a whole.
 
-Project setup includes potential for Code Spaces with a .devcontainer and is structured by `ML\*-<issue Id>_<common name>` which represents explicit data science workloads. 
+##### Table of Contents
+[Branches](#branches)
+[Prerequisites](#prerequisites)
+[Useage](#useage)
++ [Versioning](#versioning)
++ [Project Data](#proj_data)
++ [Coding Standards](#code_standards)
++ [Development Environment](#dev_environment)
++ [Data Standards](#data_process)
++ [External Dependencies](#docker)
+[Folder Structure](#folder_structure)
+[References](#references)
 
+
+
+<a name="branches"/>
 ## Branches
 Main branch is the primary branch for this project.  Note that in the future a develop branch will be created for developer submissions with integration into main by a senior developer.
 
+<a name="prerequisites"/>
 ## Prerequisites / Knowledge
 
 ### System Requirements
@@ -28,9 +43,11 @@ Main branch is the primary branch for this project.  Note that in the future a d
 #### Microsoft Azure
 
 
+<a name="useage"/>
 ## Useage instructions
 
 
+<a name="versioning"/>
 ### Versioning
 
 Various versioning is present in this repository as each task is independent of others.  Typical versioning follows [Sementic Versioning 2.0.0] (https://semver.org/).
@@ -43,6 +60,7 @@ Given a version number MAJOR.MINOR.PATCH, increment the:
 
 Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
 
+<a name="proj_data"/>
 ### Critical Project Data
 
 + All Authoritative data is kept in:
@@ -53,6 +71,7 @@ Additional labels for pre-release and build metadata are available as extensions
   + working_data  - Output generated from code, versioning applies to code. 
 
 
+<a name="code_standards"/>
 ### Coding Standards
 
 #### Development instructions
@@ -163,34 +182,22 @@ For solidity projects I use solhint with the following configuration
   }
 }
 
+<a name="docker"/>
 #### Use Docker for external dependencies
 
 For code that requires external dependencies such as Mongo, Redis, Postgres, etc, ensure there is a docker-compose.yml file configured to run those dependencies. Do not assume that a developer has Mongo etc already installed. If the developer is a contractor with multiple clients it's often difficult or impossible for them to run such things on their bare metal.
 
+<a name="dev_environment"/>
 #### Development Environment
 
 ***???***
 
-#### Development Process
-All development is to follow the standard git-flow process, modified to allow for code-reviews.
+<a name="data_process"/>
+#### Data Process
 
-See this handy, if ugly, cheat sheet.
+***???***
 
-Setup
-Fork this repo into your personal GitHub account
-clone your fork to your local development machine
-Set this repo as the upstream repo git remote add upstream <insert the upstream url>
-Disallow direct pushing to upstream git remote set-url --push upstream no_push
-create a local master branch git checkout -b master and test it via git pull upstream master
-ensure you have installed the git-flow command line helpers and git-flow-completion utils then run git flow init -d.
-Optional Git Setup
-Set up git to always rebase rather than merge.
-
-git config --global branch.autosetuprebase always
-Make sure git knows you are using your correct email.
-
-git config user.email "username@domain.suffix"
-
+<a name="folder_structure"/>
 ## Folder structure
 
 Documentation folder has 3 level tree-like structure, inspired by ZenDesk documentation structure:
@@ -219,6 +226,7 @@ Documentation folder has 3 level tree-like structure, inspired by ZenDesk docume
 ├── shared/
 │   ├── Various scripts like gcs fuse mounting.
 ```
+<a name="references"/>
 ## Reference
 
 + [Nate populate this] (https://www.google.com)
