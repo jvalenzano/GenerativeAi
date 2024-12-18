@@ -147,7 +147,9 @@ Assign teams admins with admin rights, and developers with write access to the r
 Features must be named per the following pattern #{issue number}/{some_descriptive-text} — so for example, if you are working on issue ABC-1 with the title "do the thing", call your feature ABC-1/do_the-thing. Obviously use your common sense to avoid making the feature names too long.
 
 #### Commit Messages
-When committing something use the -m flag to add a short commit message of the format {issue number} summary of what you changed. So for example if you are working on issue ABC-1 and you added a method to the aardvark_controller you might use the following commit message "ABC-1 added anteater method to aardvark controller".
+When committing something use the -m flag to add a short commit message of the format:
+
+```#<Issue_Id by Ticketing System><Optional:(Use Case Id)><Bug Fix|Feature|Documentation|Optimization><Short description of the change in past tense>.```
 
 Commit messages ought to be in the past tense.
 
@@ -162,12 +164,14 @@ If your change does not fit any of these categories, use Feature. Likewise if yo
 
 So to use the *above example your commit would have the following message*:
 
-```#<Issue Id> Feature added cosine similarity to human selected comments versus generative selected comments.```
++ ```#132 Feature added cosine similarity to human selected comments versus generative selected comments.```
++ ```#132 (ML-025) Feature added cosine similarity to human selected comments versus generative selected comments.```
 
 <a name="deployment"/>
 
 #### Deployment instructions
 
+Not applicable to this repository, these are experimental projects.  If a project graduates to operational a dedicated repository will be made for it.
 
 <a name="docker"/>
 
@@ -185,7 +189,39 @@ For code that requires external dependencies such as Mongo, Redis, Postgres, etc
 
 #### Data Process
 
-***???***
+Utilize the following tenants when maturing your data source:
+
++ Authoritative
+ + There's only one place to get it.
+ + That data represents the place to get the data and the only place.
+
++ Versioned
+ + Meaning it's known, embedded with the output.
+ + It's correlated with the code used to create it.
+
++ Easily read
+ + In AI/ML, single dimensional arrays dominate all.
+ + Binary output is secondary best.
+ + Easily understood and reentrant is likely your best bet.
+ + If possible take a well-known data structure and pickle it.  Easily read, easily understood and quickly reentrant.  Pandas -> Pickle.
+
++ Easily accessed
+ + You don't have to "hunt" for it.
+ + Access control is applied.
+ + Easily searched for in a central portal with descriptions of meta-data, links for download and previews of the content.
+
++ Cleansed
+ + Prompt Injection checked (NLP methods, existing AI neural layers).
+ + PII cleansed (Named Entity Recognition [NER] methods), DLP, and regular expressions.
+ + CUI cleansed
+ + Original data maintained and immutable.
+ + Cleaned data (at whatever level) documented and saved as an additional set of data
+
++ Peer Reviewed
+ + Data Scientist reviewed in terms of cleansing and preparatory work.
+
++ Documented
+ + See all the aforementioned information and co-locate that data in one place that's consistently formatted and easily read/discoverable (ERDDAP?)
 
 <a name="folder_structure"/>
 
