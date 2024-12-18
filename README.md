@@ -6,24 +6,33 @@ Repository for all Artificial Intelligence (AI) projects within Foundational Dig
 
 ##### Table of Contents
 [Branches](#branches)
+
 [Prerequisites](#prerequisites)
+
 [Useage](#useage)
+
 + [Versioning](#versioning)
 + [Project Data](#proj_data)
 + [Coding Standards](#code_standards)
++ [Branching Standards](#branch_standards)
 + [Development Environment](#dev_environment)
 + [Data Standards](#data_process)
 + [External Dependencies](#docker)
++ [Deployment](#deployment)
+
 [Folder Structure](#folder_structure)
+
 [References](#references)
 
 
 
 <a name="branches"/>
+
 ## Branches
 Main branch is the primary branch for this project.  Note that in the future a develop branch will be created for developer submissions with integration into main by a senior developer.
 
 <a name="prerequisites"/>
+
 ## Prerequisites / Knowledge
 
 ### System Requirements
@@ -44,10 +53,11 @@ Main branch is the primary branch for this project.  Note that in the future a d
 
 
 <a name="useage"/>
+
 ## Useage instructions
 
-
 <a name="versioning"/>
+
 ### Versioning
 
 Various versioning is present in this repository as each task is independent of others.  Typical versioning follows [Sementic Versioning 2.0.0] (https://semver.org/).
@@ -72,6 +82,7 @@ Additional labels for pre-release and build metadata are available as extensions
 
 
 <a name="code_standards"/>
+
 ### Coding Standards
 
 #### Development instructions
@@ -79,6 +90,8 @@ Additional labels for pre-release and build metadata are available as extensions
 + How to build,
 + How to test
 + Any specific environment variables needed
+
+<a name="branch_standards"/>
 
 #### Branch instructions
 
@@ -141,63 +154,31 @@ So to use the above example your commit would have the following message:
 
 ***#<Issue Id> Feature added cosine similarity to human selected comments versus generative selected comments.***
 
+<a name="deployment"/>
+
 #### Deployment instructions
 
-Linting
-For Javascript projects I use eslint and prettier to enforce a common coding style, configured via the following base .eslint.json file. This can be enhanced with React specific plugins as required, but overall stick to the defaults but with enforced single quotes and no trailing semi-colons.
-
-{
-  "extends": [
-    "standard",
-    "prettier",
-    "prettier/standard"
-  ],
-  "plugins": [
-    "prettier",
-    "standard",
-    "mocha"
-  ],
-  "parserOptions": {
-    "sourceType": "module"
-  },
-  "env": {
-    "es6": true,
-    "node": true,
-    "mocha": true
-  },
-  "rules": {
-    "prettier/prettier": ["error", { "singleQuote": true, "semi": false }]
-  }
-}
-
-For solidity projects I use solhint with the following configuration
-
-{
-  "extends": "default",
-  "rules": {
-    "compiler-fixed": false,
-    "indent": ["error", 4],
-    "quotes": ["error", "single"],
-    "max-line-length": ["error", 120]
-  }
-}
 
 <a name="docker"/>
+
 #### Use Docker for external dependencies
 
 For code that requires external dependencies such as Mongo, Redis, Postgres, etc, ensure there is a docker-compose.yml file configured to run those dependencies. Do not assume that a developer has Mongo etc already installed. If the developer is a contractor with multiple clients it's often difficult or impossible for them to run such things on their bare metal.
 
 <a name="dev_environment"/>
+
 #### Development Environment
 
 ***???***
 
 <a name="data_process"/>
+
 #### Data Process
 
 ***???***
 
 <a name="folder_structure"/>
+
 ## Folder structure
 
 Documentation folder has 3 level tree-like structure, inspired by ZenDesk documentation structure:
@@ -227,6 +208,7 @@ Documentation folder has 3 level tree-like structure, inspired by ZenDesk docume
 │   ├── Various scripts like gcs fuse mounting.
 ```
 <a name="references"/>
+
 ## Reference
 
 + [Nate populate this] (https://www.google.com)
