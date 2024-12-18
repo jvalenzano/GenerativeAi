@@ -304,7 +304,7 @@ File/Folder Explanations:
 + **Environment**:
   +  Any solution targeted for operational release will have their own repositories and pick up with the standard CTO engagement process once approved by the AI Council.
 
-## Accessibility & Design Standards
+### Accessibility & Design Standards
 
 All technical solutions and development efforts must meet the following accessibility and design standards:
 
@@ -326,7 +326,7 @@ All technical solutions and development efforts must meet the following accessib
 + **U.S. Web Design System**: 
     + Not applicable.
 
-## Technical Standards
+### Technical Standards
 
 All technical solutions and development efforts must meet the following technical standards:
 
