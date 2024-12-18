@@ -282,7 +282,7 @@ File/Folder Explanations:
 + **Security**:
   +  Development environment needs to be in an ATO approved location with cognizance of the system owner.  
   +  Changes to the development environment must be approved via ticket to the system owner. 
-  +  *** Discuss DLP***
+  +  ***Discuss DLP***
 
 + **Product Owner (business responsibility)**:
   +  Business Owner engagement form recognized the end-user/customer. 
@@ -307,13 +307,13 @@ File/Folder Explanations:
 
 ## Reference
 
-+ [USDA NRE Application Standards] (https://fsweb.wo.fs.fed.us/ad/)
++ [USDA NRE Application Standards](https://fsweb.wo.fs.fed.us/ad/)
 + [21st Century IDEA ACT](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
 + [Section 508](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
 + [M-13-13 Open Data Policy](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
 + [M-15-14 Management and Oversight of Federal Information Technology](https://policy.cio.gov/fitara/)
 + [Federal Information Technology Acquisition Reform Act (FITARA)](https://www.congress.gov/113/plaws/publ291/PLAW-113publ291.pdf#page=148)
-+ [M-16-21 Federal Source Code Policy] (https://policy.cio.gov/source-code/)
++ [M-16-21 Federal Source Code Policy](https://policy.cio.gov/source-code/)
 + [Data Center Optimization Initiative](https://policy.cio.gov/dcoi/)
 + [Guidelines for PIV-enablement](http://www.cac.mil/Portals/53/Documents/m-11-11.pdf?ver=2017-04-17-081020-897
 + [HTTPS-only Standard](https://www.whitehouse.gov/sites/whitehouse.gov/files/omb/memoranda/2015/m-15-13.pdf)
