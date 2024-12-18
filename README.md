@@ -66,11 +66,11 @@ Various versioning is present in this repository as each task is independent of 
 
 Given a version number MAJOR.MINOR.PATCH, increment the:
 
-+ MAJOR version when you make incompatible API changes
-+ MINOR version when you add functionality in a backward compatible manner
-+ PATCH version when you make backward compatible bug fixes
++ *MAJOR* version when you make incompatible API changes
++ *MINOR* version when you add functionality in a backward compatible manner
++ *PATCH* version when you make backward compatible bug fixes
 
-Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
+Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH or MAJOR-MINOR-PATCH, in support of directory structures, format.
 
 <a name="proj_data"/>
 
@@ -79,9 +79,9 @@ Additional labels for pre-release and build metadata are available as extensions
 + All Authoritative data is kept in:
   + gs://usfs-gcp-rand-test3-data-usc1
 + Authoritative folders have the following structure:
-  + public_source - immutable data used for experiments and labs.
-  + source_data   - Input used for actual Use Case development, versioning applies to code.
-  + working_data  - Output generated from code, versioning applies to code. 
+  + ```public_source``` - immutable data used for experiments and labs.
+  + ```source_data``` - Input used for actual Use Case development, versioning applies to code.
+  + ```working_data``` - Output generated from code, versioning applies to code. 
 
 
 <a name="code_standards"/>
