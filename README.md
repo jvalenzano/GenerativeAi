@@ -364,6 +364,10 @@ All technical solutions and development efforts must meet the following technica
 
 ## Reference
 
++ [Machine Learning Mastery](http://machinelearningmastery.com)
++ [Jupyter Notebooks](https://jupyter.org/)
++ [Jupyter Code Prettify](https://medium.com/geekculture/simple-way-to-format-your-jupyter-notebook-codes-in-python-9baa6e759ef6)
+
 + [USDA NRE Application Standards](https://fsweb.wo.fs.fed.us/ad/)
 + [21st Century IDEA ACT](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
 + [Section 508](https://digital.gov/resources/21st-century-integrated-digital-experience-act/?utm_source=listserv-allcop&utm_medium=email&utm_campaign=web-standards-2020-01-23)
