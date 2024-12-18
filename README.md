@@ -274,6 +274,8 @@ File/Folder Explanations:
 
 ## USDA NRE Compliance
 
+### General Standards
+
 + **Governance and Business Case**:
   +  Use Case management occurs within the AI Council.
   +  Business Owner engagement is required for active Use Cases.
@@ -302,6 +304,61 @@ File/Folder Explanations:
 + **Environment**:
   +  Any solution targeted for operational release will have their own repositories and pick up with the standard CTO engagement process once approved by the AI Council.
 
+## Accessibility & Design Standards
+
+All technical solutions and development efforts must meet the following accessibility and design standards:
+
++ **Accessibility**: 
+    + Section 508 compliance is difficult to achieve due to the nature of certain Python libraries, however efforts are being made to provide *alt* text inputs and comments that work with JAWS screen readers.
+    + Note that operational capabilities are expected to be compliant if a web presence is established.
++ **Consistency**:
+    +  Power BI is used to present data in most Use Cases with collaboration with the end-user.
+
++ **Mobile friendly**: Technical Solutions must be usable and function on mobile devices.
+    + Not applicable for current exploratory efforts.
+
++ **Searchable**: 
+    + Not applicable unless a solution is developed for operational release.  Most of these efforts are Jupyter Notebook runs resulting in a data file which is presented / reviewed via Power BI.
+
++ **User-centered**:
+    +  Power BI is utilized with end-user collaboration for output files.
+
++ **U.S. Web Design System**: 
+    + Not applicable.
+
+## Technical Standards
+
+All technical solutions and development efforts must meet the following technical standards:
+
++ **Solution Architecture**:
+  + Architecture Review Board (ARB) would approve a solution is graduation into the CTO Demand Intake process authorized forward progression to Operations.
+
++ **Source Code Management**: 
+  + See this repository.
+
++ **Main Branch Management**:
+  + A main branch exists with a defined Branch.
+
++ **Technology Stacks**:
+  + Technology stack is investigated during the Prototyping process.  Final approval of the solution would require ARB approval.
+
++ **Continuous Integration and Compliance Validation**:
+  +  Note that these Prototypes are exploratory in nature and not valid candidates for CI/CD efforts.
+
++ **Standard Configuration**:
+  +  Not applicable as these are proofs of concept / prototypes and not for operational use.
+
++ **Continuous Deployment and Release Management**:
+  +  Not applicable.
+
++ **Minify**:
+  + Not applicable.
+
++ **JAVA Development**: 
+  + Not applicable.
+
++ **Employ Continuous Monitoring and Alerting**:
+  + Not applciable, not operationally released, different process.
 
 <a name="references"/>
 
