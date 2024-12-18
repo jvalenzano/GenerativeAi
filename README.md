@@ -230,28 +230,47 @@ Documentation folder has 3 level tree-like structure, inspired by ZenDesk docume
 
 ```
 ./
-├── .devcontainer/ (potential for CodeSpaces)
+├── .devcontainer/
 │   ├── Dockerfile
 │   ├── devcontainer.json
-├── .gitignore
+├── .env
+├── .env_ai
+├── .env_api_keys
+├── .env_cloud
 ├── README.md
 ├── ML-Support/
-│   ├── cfg (sample *nix configuration file)
-│   ├── environment (environment files for Anaconda setups)
-│   ├── script (scripts to run them all for Git repos, templates)
+│   ├── cfg 
+│   ├── environment 
+│   ├── script
 │   ├── README.md
 │   ├── *.py
-│   ├── *.rc (screen configuration file examples)
-│   ├── debug.py (standard logging library)
+│   ├── *.rc 
+│   ├── debug.py
 │   ├── MOAM.py
 │   ├── test_MOAM.py
 │   ├── test_MOAM_documentation.md
 │   └── another_article/
 └── ML-<Issue Id, 3 digits>_<Short Name>/
+    └── .env_app
     └── *
 ├── shared/
 │   ├── Various scripts like gcs fuse mounting.
 ```
+File/Folder Explanations:
++ .devcontainer - potential for CodeSpaces within GitHub.
+
++ .env* - files that support Pythonic projects for environment file loaded (configuration setup).
+
++  ML-Support/environment - Environment specification for standard Anaconda setups.
+
++  ML-Support/script - Examples/template for GitHub's One Script to Rule them All.
+
++  ML-Support/*.rc - Templates for Unix screen commands.
+
++  ML-Support/debug.py - Standard logging library.
+
+
+
 <a name="references"/>
 
 ## Reference
