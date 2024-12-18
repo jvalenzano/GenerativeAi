@@ -41,12 +41,12 @@ Main branch is the primary branch for this project.  Note that in the future a d
 
 ##### Library Requirements
 
-```
-+ pip install nvidia-cudnn-cu12==8.9.7.29
-+ pip install tensorflow==2.17
-+ pip install tensorrt
-+ pip install spacy[cuda12x]
-+ pip install torch torchvision torchaudio pycuda
+```shell
+pip install nvidia-cudnn-cu12==8.9.7.29
+pip install tensorflow==2.17
+pip install tensorrt
+pip install spacy[cuda12x]
+pip install torch torchvision torchaudio pycuda
 ```
 
 **Expect to see a v2.4 for Torch.**
@@ -90,10 +90,17 @@ Additional labels for pre-release and build metadata are available as extensions
 
 #### Development instructions
 
-+ How to build,
-+ How to test
-+ Any specific environment variables needed
-
+```mermaid
+graph TD;
+    Requirements-->Validation;
+    Validation-->Create_Issue;
+    Create_Issue-->Branch;
+    Branch-->Data_Curation;
+    Data_Curation-->Develop;
+    Develop-->Test;
+    Test-->Customer_Engagement;
+    Customer_Engagement-->Refine;
+```    
 <a name="branch_standards"/>
 
 #### Branch instructions
