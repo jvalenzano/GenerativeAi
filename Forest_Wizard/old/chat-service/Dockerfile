@@ -1,4 +1,4 @@
-FROM python:3.9.1-alpine
+FROM python:3.14.0-alpine
 RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
