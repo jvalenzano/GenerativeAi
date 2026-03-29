@@ -1,4 +1,4 @@
-FROM python:3.9.1-alpine
+FROM python:3.14.0a3-alpine
 RUN addgroup -S nonroot && adduser -S nonroot -G nonroot
 WORKDIR /Forest_Wizard
 COPY ./Forest_Wizard/requirements.txt .
